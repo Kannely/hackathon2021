@@ -40,7 +40,7 @@ To test if the installation went well, execute:
 ```
 python test_installation\django_1.py
 ```
-Result should be ```3.1.5``` .
+You should see a version number, such as ```3.1.5``` .
 
 To run the app, use:
 ```
@@ -74,7 +74,7 @@ To test if the installation went well, execute:
 ```
 python test_installation\django_1.py
 ```
-Result should be ```3.1.5``` .
+You should see a version number, such as ```3.1.5``` .
 
 To run the app, use:
 ```
