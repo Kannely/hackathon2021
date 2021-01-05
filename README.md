@@ -1,4 +1,4 @@
-# Login - Hackaton 2021
+# Login - Hackathon 2021
 
 ## Creation of virtual environments
 
@@ -8,7 +8,7 @@ Creation of virtual environments is done by executing the command venv:
 ```
 python -m venv venv
 ```
-Once installed, you can activate it as follow :
+Once installed, you can activate it as follows:
 #### cmd
 ```
 venv\Scripts\activate.bat
@@ -23,17 +23,11 @@ Then install Django:
 python -m pip install Django
 ```
 
-pour quitter :
-deactivate 
-dans les deux cas
-
-
-python
-import django
-print(django.get_version())
-
-result should be 3.1.5
-
-exit()
-
+To test if the installation went well, execute :
+```
 python test_installation\django_1.py
+```
+Result should be ```3.1.5``` .
+
+
+### Linux 
