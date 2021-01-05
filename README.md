@@ -1,9 +1,16 @@
 # Login - Hackathon 2021
 
+## Clone the repository to your local machine
 
-## Install
+First, you will have to clone the repository:
+```
+git clone https://github.com/Kannely/hackathon2021.git
+```
 
-
+Make sure you are on the master branch, otherwise you can change your branch with the following command:
+```
+git checkout master
+```
 
 ## Creation of virtual environments
 
