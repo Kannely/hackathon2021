@@ -65,7 +65,7 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
-# PyTorch stuff:
+# PyCharm stuff:
 .idea
 
 # Scrapy stuff:
