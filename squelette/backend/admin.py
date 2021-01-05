@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Nombre
+from .models import Cat, Kibble
 
 # Register your models here.
-
-admin.site.register(Nombre)
+admin.site.register(Cat)
+admin.site.register(Kibble)
