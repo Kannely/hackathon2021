@@ -1,5 +1,7 @@
 # Login - Hackathon 2021
 
+# Installation
+
 ## Clone the repository to your local machine
 
 First, you will have to clone the repository:
@@ -86,3 +88,28 @@ When you are done you can leave the virtual environments with the command:
 ```
 deactivate
 ```
+
+## Initialisation of the database
+
+First of all, the database needs to be initialized. To do so, run:
+```
+python manage.py migrate
+```
+
+To create a superuser which can access the admin panel, use:
+```
+python manage.py createsuperuser
+```
+Follow the instruction by choosing a username and a password (you can leave a blank e-mail address if you want).
+
+# Development
+
+## Updating the database's model
+
+When modifying ```backend/models.py``` file, it is necessary to run a few commands to apply the modifications to the database. Run both commands:
+```
+python manage.py makemigrations backend
+python manage.py migrate
+```
+
+Note : the process may not be straightforward if the changes in the database are non-trivial to adapt. In such cases, it is necessary to make manual adjustements.
