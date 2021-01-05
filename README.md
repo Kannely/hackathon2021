@@ -47,3 +47,35 @@ deactivate
 ```
 
 ### Linux 
+
+
+Creation of virtual environments is done by executing the command venv:
+```
+python3 -m venv venv
+```
+Once installed, you can activate it as follows:
+```
+source venv/bin/activate
+```
+
+In the virtual environment, install Django:
+```
+pip install django
+```
+
+To test if the installation went well, execute:
+```
+python test_installation\django_1.py
+```
+Result should be ```3.1.5``` .
+
+To run the app, use:
+```
+cd squelette
+python manage.py runserver
+```
+
+When you are done you can leave the virtual environments with the command:
+```
+deactivate
+```
