@@ -14,11 +14,11 @@ Creation of virtual environments is done by executing the command venv:
 python -m venv venv
 ```
 Once installed, you can activate it as follows:
-#### cmd
+* Command Prompt
 ```
 venv\Scripts\activate.bat
 ```
-#### PowerShell
+* PowerShell
 ```
 venv\Scripts\Activate.ps1
 ```
