@@ -91,6 +91,8 @@ deactivate
 
 ## Initialisation of the database
 
+Note : this is not necessary if the ```db.sqlite3``` already exists in the project folder.
+
 First of all, the database needs to be initialized. To do so, run:
 ```
 python manage.py migrate
