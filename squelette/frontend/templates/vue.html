@@ -1,9 +1,12 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
+{% load vue_components %}
+
+{% block script %}
+    {{ "cat"|load_component }}
+{% endblock %}
 
 {% block content %}
-<h1>This is Vue</h1>
-<p>I still have nothing to say</p>
-<p>My favorite cat is [[ favoriteCat ]].</p>
-<button @click="changeCat()">Change favorite cat</button>
-<input type="text" v-model="favoriteCat"/>
+    <h1>This is Vue</h1>
+    <p>I still have nothing to say</p>
+    <cat-component />
 {% endblock %}

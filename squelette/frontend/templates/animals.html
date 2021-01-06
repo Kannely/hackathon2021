@@ -1,30 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if cats %}
-<div>
-	<table>
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Age</th>
-				<th>Weight</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for cat in cats %}
-			<tr>
-				<th>{{ cat.id }}</th>
-				<th>{{ cat.name }}</th>
-				<th>{{ cat.age }}</th>
-				<th>{{ cat.weight }}</th>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% else %}
-<p>No cats available.</p>
-{% endif %}
+    {% if cats %}
+    <div>
+	    <table>
+		    <thead>
+			    <tr>
+				    <th>ID</th>
+				    <th>Name</th>
+				    <th>Age</th>
+				    <th>Weight</th>
+			    </tr>
+		    </thead>
+		    <tbody>
+			    {% for cat in cats %}
+			    <tr>
+				    <td>{{ cat.id }}</td>
+				    <td>{{ cat.name }}</td>
+				    <td>{{ cat.age }}</td>
+				    <td>{{ cat.weight }}</td>
+			    </tr>
+			    {% endfor %}
+		    </tbody>
+	    </table>
+    </div>
+    {% else %}
+    <p>No cats available.</p>
+    {% endif %}
 {% endblock %}
