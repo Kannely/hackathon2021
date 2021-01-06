@@ -22,7 +22,7 @@ def index(request):
     cat = Cat(name='Zorro', age=16, weight=4)
     cat.save()
     print(Cat.objects.all())
-    return render(request, "frontend/index.html", context)
+    return render(request, "index.html", context)
 
 def about(request):
     return HttpResponse("About")
