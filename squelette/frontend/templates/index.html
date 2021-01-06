@@ -20,12 +20,17 @@
 			bottom: 2%;
 		}
 
-		.nav-link span {
-			padding-right: 10px;
+		.nav-link {
+			display: inline;
 		}
 
 		.container {
 			position: relative;
+		}
+
+		nav img {
+			width: 100%;
+			padding: 10% 5% 15% 5%;
 		}
 
 		footer {
@@ -36,64 +41,76 @@
 			text-align: center;
 			line-height: 50px;
 		}
-		</style>
-	</head>
-	<body>
-		<div class="container-fluid">
-			<div class="row">
-				<nav class="col-md-2 d-none d-md-block bg-light sidebar">
-					<div class="sidebar-sticky">
-						<img src="/media/IMT_logo_2017.png">
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div class="sidebar-sticky">
+					<img src="/static/IMT_logo_2017.png">
 
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" href="#">
-									<span><i class="fas fa-cat"></i></span>Menu 1
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">
-									<span><i class="fas fa-dog"></i></span>Menu 2
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">
-									<span><i class="fas fa-fish"></i></span>Menu 3
-								</a>
-							</li>
-						</ul>
-
-						<div class="bottom">
+					<ul class="nav flex-column">
+						<li class="nav-item">
 							<a class="nav-link" href="#">
-								<span><i class="fas fa-user-circle"></i></span>Connexion
+								<i class="fas fa-cat"></i><a href="about">About</a>
 							</a>
-						</div>
-					</div>
-				</nav>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">
+								<i class="fas fa-dog"></i><a href="animals">Animals</a>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">
+								<i class="fas fa-fish"></i><a href="vue">Vue</a>
+							</a>
+						</li>
+					</ul>
 
-				<main role="main" id="app" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-					<h1>Home page</h1>
-					[[ message ]]
-					{% block content %}
-					{% endblock %}
-				</main>
-				<footer class="footer">
-					<div class="container">
-						Un beau footer de la team Agathe, Kévin, Audrey
+					<div class="bottom">
+						<a class="nav-link" href="#">
+							<i class="fas fa-user-circle"></i><a href="connexion">Connexion</a>
+						</a>
 					</div>
-				</footer>
-			</div>
+				</div>
+			</nav>
 
+			<main role="main" id="app" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				{% block content %}
+				{% endblock %}
+			</main>
+			<footer class="footer">
+				<div class="container">
+					Un beau footer de la team Agathe, Kévin, Audrey
+				</div>
+			</footer>
 		</div>
 
-		<script>
-			var app = new Vue({
-				delimiters: ["[[", "]]"],
-				el: '#app',
-				data: {
-					message: 'Hello Vue!'
+	</div>
+
+	<script>
+		const app = new Vue({
+			el: '#app',
+			delimiters: ["[[", "]]"],
+			data: {
+				favoriteCat: 'Berlioz'
+			},
+			computed: {
+				label() {
+					return 'New favorite cat : ' + this.favoriteCat
 				}
-			})
-		</script>
-	</body>
-	</html>
+			},
+			methods: {
+				alertCat(catName) {
+					alert('My favorite cat is ' + catName);
+				},
+				changeCat() {
+					this.favoriteCat = 'Garfield';
+					this.alertCat(this.favoriteCat)
+				}
+			}
+		})
+	</script>
+</body>
+</html>
