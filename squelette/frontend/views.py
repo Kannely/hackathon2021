@@ -6,9 +6,10 @@ from django.shortcuts import render
 from backend.models import Cat, Kibble
 
     
-menu = {"menu": [
+menu = { "menu": [
     { "name": "Index", "class": "fas fa-cat", "url": "front_index" },
-    { "name": "About", "class": "fas fa-dog", "url": "front_about" }
+    { "name": "About", "class": "fas fa-dog", "url": "front_about" },
+    { "name": "Animals", "class": "fas fa-dog", "url": "front_animals" },
 ]}
 
 def index(request):
