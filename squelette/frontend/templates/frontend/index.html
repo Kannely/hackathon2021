@@ -28,8 +28,20 @@
 		</div>
 	</nav>
 
-	<div id="app">
+	<div id="app" class="container">
 		[[ message ]]
+
+		{% if cats %}
+		<ul>
+			{% for cat in cats %}
+			<li>
+				<a href="{{cat.url}}">{{ cat.name }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+		<p>No cats available.</p>
+		{% endif %}
 	</div>
 
 	<script>
