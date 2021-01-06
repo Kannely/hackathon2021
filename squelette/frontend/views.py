@@ -6,20 +6,12 @@ from django.shortcuts import render
 
 from backend.models import Cat, Kibble
 
-<<<<<<< HEAD
 menu = {"menu": [
     { "name": "Index", "class": "fas fa-cat", "url": "front_index" },
     { "name": "About", "class": "fas fa-dog", "url": "front_about" },
     { "name": "Animals", "class": "fas fa-heart", "url": "front_animals" },
     { "name": "Vue", "class": "fas fa-fish", "url": "front_vue" },
-    { "name": "Movies", "class": "fas fa-paw", "url": "front_movies" }
-=======
-    
-menu = { "menu": [
-    { "name": "Index", "class": "fas fa-cat", "url": "front_index" },
-    { "name": "About", "class": "fas fa-dog", "url": "front_about" },
-    { "name": "Animals", "class": "fas fa-dog", "url": "front_animals" },
->>>>>>> 2ba4360b3a0d59c2dc7592f90d69105d65b2494f
+    { "name": "Movies", "class": "fas fa-paw", "url": "front_movies/bruce/willis" }
 ]}
 
 def index(request):
@@ -42,9 +34,7 @@ def animals(request):
     print(Cat.objects.all())
     return render(request, "animals.html", context)
 
-def movies(request):
-	name = "Bruce"
-	surname = "Willis"
+def movies(request,name,surname):
 	result_url = "http://127.0.0.1:8000/back/actor/{}/{}/".format(name, surname)
 	with urllib.request.urlopen(result_url) as url:
 		data = json.loads(url.read().decode())
