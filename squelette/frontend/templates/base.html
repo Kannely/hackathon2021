@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {% block title %}
+            Hackathon
+            {% endblock %}
+        </title>
+        <link rel="stylesheet" href="/static/base.css" />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<nav>
+		    {% block sidebar %}
+			<img src="/static/logo.png" />
+			<ul>
+			    {% for menuitem in menu %}
+			    <li>
+			        <a href="{% url menuitem.url %}">
+			        {% if menuitem.class %}
+			        <span><i class="{{ menuitem.class }}"></i></span>
+			        {% endif %}
+			        {{ menuitem.name }}
+			        </a>
+			    </li>
+			    {% endfor %}
+			</ul>
+			{% endblock %}
+		</nav>
+		<main id="app">
+			{% block content %}
+			{% endblock %}
+		</main>
+		<footer>
+		    {% block footer %}
+	        Un beau footer de la team Agathe, Kévin, Audrey !
+		    {% endblock %}
+		</footer>
+	    <script src="/static/base.js"></script> <!-- The JS is delayed until the end so that all necessary Vue components are loaded -->
+	</body>
+</html>
