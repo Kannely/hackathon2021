@@ -12,3 +12,5 @@ class Kibble(models.Model):
     cat = models.ForeignKey(Cat, on_delete=models.CASCADE)
     lunch_date = models.DateTimeField('Lunch date')
     weight = models.DecimalField(max_digits=10, decimal_places=2)
+
+
