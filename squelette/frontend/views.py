@@ -6,23 +6,16 @@ from django.shortcuts import render
 from backend.models import Cat, Kibble
 
 def index(request):
-    names = ("Miaous", "Garfield", "Grosminet", "O'Malley", "Tom")
+    # names = ("Miaous", "Garfield", "Grosminet", "O'Malley", "Tom")
 
-    cats = []
-    for name in names:
-        cats.append({
-            "name": name,
-            "age": random.randint(1,18),
-            "weight": random.randint(2,10),
-        })
+    # for name in names:
+    # 	cat = Cat(name=name, age=random.randint(1,18), weight=random.randint(2,10))
+    # 	cat.save()
 
     context = {}
     context["cats"] = Cat.objects.all()
-    Cat.objects.filter(name="Zorro").delete()
-    cat = Cat(name='Zorro', age=16, weight=4)
-    cat.save()
     print(Cat.objects.all())
-    return render(request, "index.html", context)
+    return render(request, "animals.html", context)
 
 def about(request):
     return HttpResponse("About")
