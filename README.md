@@ -77,7 +77,7 @@ pip install django
 
 To test if the installation went well, execute:
 ```
-python test_installation\django_1.py
+python test_installation/django_1.py
 ```
 You should see a version number, such as ```3.1.5``` .
 
