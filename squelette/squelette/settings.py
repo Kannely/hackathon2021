@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Build paths inside the project like this: BASE_DIR / 'subdir'.import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +26,13 @@ SECRET_KEY = '(vch--!5nk63y+-xai3zml-7+=+b(77=ja)g$*r$*4n%p-w*-x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+env_allowed_hosts = []
+try:
+  env_allowed_hosts = os.environ["ALLOWED_HOSTS"].split(",")
+except KeyError:
+  pass
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + env_allowed_hosts
 
 
 # Application definition
@@ -78,7 +85,7 @@ WSGI_APPLICATION = 'squelette.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR + os.sep + 'db.sqlite3',
     }
 }
 
@@ -119,4 +126,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
