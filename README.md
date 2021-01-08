@@ -52,7 +52,7 @@ cd squelette
 python manage.py runserver
 ```
 
-When you are done you can leave the virtual environments with the command:
+When you are done, you can leave the virtual environment with the command:
 ```
 deactivate
 ```
@@ -87,7 +87,7 @@ cd squelette
 python manage.py runserver
 ```
 
-When you are done you can leave the virtual environments with the command:
+When you are done, you can leave the virtual environment with the command:
 ```
 deactivate
 ```
