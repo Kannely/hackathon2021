@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load vue_components %}
+
+{% block script %}
+    {{ "movies"|load_component }}
+{% endblock %}
+
+{% block content %}
+    <h1>Movies</h1>
+    <movies-component />
+{% endblock %}
+
