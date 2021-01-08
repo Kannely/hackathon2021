@@ -14,11 +14,13 @@ Make sure you are on the master branch, otherwise you can change your branch wit
 git checkout master
 ```
 
+Also check that you have Python 3 with a version above 3.6.
+
 ## Creation of virtual environments
 
 ### Windows 
 
-Creation of virtual environments is done by executing the command venv:
+To create a virtual environment for the project, run the following command:
 ```
 python -m venv venv
 ```
@@ -50,15 +52,16 @@ cd squelette
 python manage.py runserver
 ```
 
-When you are done you can leave the virtual environments with the command:
+When you are done, you can leave the virtual environment with the command:
 ```
 deactivate
 ```
 
 ### Linux 
 
+Before proceeding, make sure that virtual environments can be created on your system. You may need to install an additional package before being able to, such as ```python3-venv``` on Debian-based systems.
 
-Creation of virtual environments is done by executing the command venv:
+To create a virtual environment for the project, run the following command:
 ```
 python3 -m venv venv
 ```
@@ -74,7 +77,7 @@ pip install django
 
 To test if the installation went well, execute:
 ```
-python test_installation\django_1.py
+python test_installation/django_1.py
 ```
 You should see a version number, such as ```3.1.5``` .
 
@@ -84,7 +87,7 @@ cd squelette
 python manage.py runserver
 ```
 
-When you are done you can leave the virtual environments with the command:
+When you are done, you can leave the virtual environment with the command:
 ```
 deactivate
 ```
@@ -104,6 +107,13 @@ python manage.py createsuperuser
 ```
 Follow the instruction by choosing a username and a password (you can leave a blank e-mail address if you want).
 
+# Utilisation
+
+## Once the server is launched :
+
+#### To access the front-end's index, append ```/front``` at the end of the hostname - for instance, if deployed locally, the hostname is ```localhost```.
+#### Similarly, to access the back-end's index, append ```/back``` at the end of the hostname.
+
 # Development
 
 ## Updating the database's model
@@ -115,3 +125,9 @@ python manage.py migrate
 ```
 
 Note : the process may not be straightforward if the changes in the database are non-trivial to adapt. In such cases, it is necessary to make manual adjustements.
+
+# Deployment
+
+## Scalingo
+
+The branch ```master``` is deployed at the following link : https://hack-squelette.osc-fr1.scalingo.io/
