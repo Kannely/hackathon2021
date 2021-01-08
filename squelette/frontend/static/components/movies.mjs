@@ -1,3 +1,5 @@
+import { debounce } from './utils/general.mjs';
+
 Vue.component('movies-component', {
     template: `
     <div>
@@ -48,18 +50,6 @@ Vue.component('movies-component', {
 	    },
 	},
 	created: function() {
-	    function debounce(func, wait) { /* Temporary location */
-	        var timeout;
-	        return function() {
-		        var context = this, args = arguments;
-		        var later = function() {
-			        timeout = null;
-			        func.apply(context, args);
-		        };
-		        clearTimeout(timeout);
-		        timeout = setTimeout(later, wait);
-	        };
-        };
 	    this.debouncedSearchMovies = debounce(this.searchMovies, 500)
 	    this.searchMovies();
     },
