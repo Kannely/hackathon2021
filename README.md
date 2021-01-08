@@ -140,7 +140,7 @@ On the web dashboard of Scalingo, create a new app with a name (note down the ho
 
 Then, in your app, go to the ```Environment Variables``` tab and do the following :
  - Add this line : ```DISABLE_COLLECTSTATIC=1```
- - Add this line, **by appending to it the hostname given to you by Scalingo earlier** : ```ALLOWED_HOSTS=```
+ - Add this line, **by appending to it the hostname given to you by Scalingo earlier (don't add quotes)** : ```ALLOWED_HOSTS=```
  - Remove the line which starts with ```DATABASE_URL```
 Don't forget to click the ```Update``` button to save the changes.
 
