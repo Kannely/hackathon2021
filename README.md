@@ -132,11 +132,11 @@ Note : the process may not be straightforward if the changes in the database are
 
 ### Instructions
 
-Before proceeding, make sure that you have access to a Scalingo account and that you have successfully generated the database locally, as Scalingo cannot generate the database on its own.
+Before proceeding, make sure that you have access to a Scalingo account and that you have successfully generated the database locally, as Scalingo cannot generate the database on its own. Also make sure that you have a public SSH key : first check if you already have one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/checking-for-existing-ssh-keys), and if you don't generate one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key).
 
 First of all, at the root of the project (which contains this ```README.md``` file), copy the ```squelette``` folder to a folder outside of the project.
 
-On the web dashboard of Scalingo, create a new app with a name, and give your public SSH keys (the procedure to obtain it varies depending on the OS). For the database, choose ```PostGreSQL``` - we will not use it, but we have to select it regardless. Note down the hostname given to you by Scalingo.
+On the web dashboard of Scalingo, create a new app with a name, and give your public SSH key. For the database, choose ```PostGreSQL``` - we will not use it, but we have to select it regardless. Note down the hostname given to you by Scalingo.
 
 Then, in your app, go to the ```Environment Variables``` tab and do the following :
  - Add this line : ```DISABLE_COLLECTSTATIC=1```
