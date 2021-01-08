@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'squelette.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+import importlib
 
 DATABASES = {
     'default': {
@@ -88,6 +89,16 @@ DATABASES = {
         'NAME': BASE_DIR + os.sep + 'db.sqlite3',
     }
 }
+
+is_scalingo = importlib.util.find_spec("dj_database_url")
+if is_scalingo is not None:
+  import dj_database_url
+  try:
+    database_url = os.environ["DATABASE_URL"]
+    print("Using DATABASE_URL...")
+    DATABASES = { 'default': dj_database_url.config() }
+  except KeyError:
+    pass
 
 
 # Password validation
