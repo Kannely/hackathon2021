@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h1>Animals</h1>
+    <p> Here is the list of all the pets housed at the shelter :</p>
     {% if cats %}
-    <div>
-	    <table>
+    <div class="center">
+	    <table id="animals-table">
 		    <thead>
 			    <tr>
 				    <th>ID</th>

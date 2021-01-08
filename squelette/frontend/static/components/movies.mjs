@@ -3,8 +3,8 @@ import { debounce } from './utils/general.mjs';
 Vue.component('movies-component', {
 	template: `
 	<div class="center">
-		<input type="text" v-model="actorName"/>
-		<input type="text" v-model="actorSurname"/>
+		<input type="text" v-model="actorName" placeholder="First name"/>
+		<input type="text" v-model="actorSurname" placeholder="Last name"/>
 		<button @click="searchMovies()">Force search</button>
 		<h3>Movies starring {{ actorName }} {{ actorSurname }} : </h3>
 		<input id="filter-input" type="text" v-model="filter" placeholder="Filter movies"/>
@@ -55,7 +55,7 @@ Vue.component('movies-component', {
 			if (!matchExists) return text;
 
 			const re = new RegExp(this.filter, 'ig');
-			return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+			return text.replace(re, matchedText => `<strong style="color:#8f9cf0;">${matchedText}</strong>`);
 		}		
 	},
 	created: function() {

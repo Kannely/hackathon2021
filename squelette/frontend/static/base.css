@@ -101,3 +101,27 @@ button:hover {
     margin-left: auto;
     margin-right: auto;
 }
+
+#animals-table {
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#animals-table th {
+  background-color: #8f9cf0;
+  color: white;
+  font-size: 1.2em;
+}
+
+#animals-table tr {
+    line-height: 1.5;
+}
+
+#animals-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#animals-table td, #animals-table th {
+    border: 1px solid #ddd;
+    padding: 0 4vh;
+}
