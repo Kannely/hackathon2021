@@ -144,16 +144,14 @@ Then, in your app, go to the ```Environment Variables``` tab and do the followin
  - Remove the line which starts with ```DATABASE_URL```
 Don't forget to click the ```Update``` button to save the changes.
 
-Finally, in the terminal, with Git installed, run the following commands :
+Finally, in the terminal, with Git installed, inside the copied folder (normally, there should be a ``manage.py``` file in your current working directory), run the following commands :
 ```
 git init
 git add .
 git commit -m "Init Django application"
-git remote add scalingo git@ssh.osc-fr1.scalingo.com:myapp.git
-git push scalingo master
 ```
 
-Note: the 4th line may be different depending on your region. In this case, go the ```Code``` tab on the website and use the command shown instead.
+Finally, run the 2 commands shown on your ```Code``` page.
 
 ### Example
 
