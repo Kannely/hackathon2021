@@ -7,11 +7,12 @@
 First, you will have to clone the repository:
 ```
 git clone https://github.com/Kannely/hackathon2021.git
+cd hackathon2021
 ```
 
-Make sure you are on the master branch, otherwise you can change your branch with the following command:
+Make sure you are on the main branch, otherwise you can change your branch with the following command:
 ```
-git checkout master
+git checkout main
 ```
 
 Also check that you have Python 3 with a version above 3.6.
@@ -52,6 +53,8 @@ cd squelette
 python manage.py runserver
 ```
 
+To check if the server is working, follow the instructions in **Utilisation**.
+
 When you are done, you can leave the virtual environment with the command:
 ```
 deactivate
@@ -86,6 +89,8 @@ To run the app, use:
 cd squelette
 python manage.py runserver
 ```
+
+To check if the server is working, follow the instructions in **Utilisation**.
 
 When you are done, you can leave the virtual environment with the command:
 ```
@@ -138,9 +143,11 @@ First of all, at the root of the project (which contains this ```README.md``` fi
 
 On the web dashboard of Scalingo, create a new app with a name (note down the hostname, as it will be used later), and give your public SSH key. For the database, choose ```PostGreSQL``` - we will not use it, but we have to select it regardless. **Don't use the commands provided by Scalingo yet.**
 
+Note : if you have not noted the hostname, you can find it again in the ```Containers``` tab (remove the ```https://``` from the link given).
+
 Then, in your app, go to the ```Environment Variables``` tab and do the following :
  - Add this line : ```DISABLE_COLLECTSTATIC=1```
- - Add this line, **by appending to it the hostname given to you by Scalingo earlier** : ```ALLOWED_HOSTS=```
+ - Add this line, **by appending to it the hostname given to you by Scalingo earlier (don't add quotes)** : ```ALLOWED_HOSTS=```
  - Remove the line which starts with ```DATABASE_URL```
 Don't forget to click the ```Update``` button to save the changes.
 
