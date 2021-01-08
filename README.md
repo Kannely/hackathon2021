@@ -132,7 +132,7 @@ Note : the process may not be straightforward if the changes in the database are
 
 ### Instructions
 
-Before proceeding, make sure that you have access to a Scalingo account and that you have successfully generated the database locally, as Scalingo cannot generate the database on its own. Also make sure that you have a public SSH key : first check if you already have one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/checking-for-existing-ssh-keys), and if you don't generate one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key).
+Before proceeding, make sure that you have access to a Scalingo account and that you have successfully generated the database locally, as Scalingo cannot generate the database on its own. Also make sure that you have a public SSH key : first check if you already have one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/checking-for-existing-ssh-keys ), and if you don't generate one (https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key ).
 
 First of all, at the root of the project (which contains this ```README.md``` file), copy the ```squelette``` folder to a folder outside of the project.
 
@@ -155,4 +155,5 @@ Finally, run the 2 commands shown on your ```Code``` page.
 
 ### Example
 
-The branch ```master``` is deployed at the following link : https://hack-squelette.osc-fr1.scalingo.io/
+The branch ```master``` is deployed on Scalingo at the following link : hack-scalingo.klethuillier.fr/
+(To access the front-end : hack-scalingo.klethuillier.fr/front )
