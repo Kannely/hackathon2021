@@ -6,12 +6,8 @@ Vue.component('movies-component', {
         <input type="text" v-model="actorName"/>
         <input type="text" v-model="actorSurname"/>
         <button @click="searchMovies()">Force search</button>
-        <table>
-            <thead>
-                <tr>
-	                <th>Movies starring {{ actorName }} {{ actorSurname }} : </th>
-                </tr>
-            </thead>
+        <h3>Movies starring {{ actorName }} {{ actorSurname }} : </h3>
+        <table id="movie-table">
             <tbody v-if="movies.length > 0">
                 <tr v-for="movie in movies">
 	                <td>{{ movie }}</td>
