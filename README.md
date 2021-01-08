@@ -130,4 +130,31 @@ Note : the process may not be straightforward if the changes in the database are
 
 ## Scalingo
 
+### Instructions
+
+Before proceeding, make sure that you have access to a Scalingo account and that you have successfully generated the database locally, as Scalingo cannot generate the database on its own.
+
+First of all, at the root of the project (which contains this ```README.md``` file), copy the ```squelette``` folder to a folder outside of the project.
+
+On the web dashboard of Scalingo, create a new app with a name, and give your public SSH keys (the procedure to obtain it varies depending on the OS). For the database, choose ```PostGreSQL``` - we will not use it, but we have to select it regardless. Note down the hostname given to you by Scalingo.
+
+Then, in your app, go to the ```Environment Variables``` tab and do the following :
+ - Add this line : ```DISABLE_COLLECTSTATIC=1```
+ - Add this line, **by appending to it the hostname given to you by Scalingo earlier** : ```ALLOWED_HOSTS=```
+ - Remove the line which starts with ```DATABASE_URL```
+Don't forget to click the ```Update``` button to save the changes.
+
+Finally, in the terminal, with Git installed, run the following commands :
+```
+git init
+git add .
+git commit -m "Init Django application"
+git remote add scalingo git@ssh.osc-fr1.scalingo.com:myapp.git
+git push scalingo master
+```
+
+Note: the 4th line may be different depending on your region. In this case, go the ```Code``` tab on the website and use the command shown instead.
+
+### Example
+
 The branch ```master``` is deployed at the following link : https://hack-squelette.osc-fr1.scalingo.io/
