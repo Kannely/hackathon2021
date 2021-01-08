@@ -32,7 +32,7 @@ try:
 except KeyError:
   pass
 
-ALLOWED_HOSTS = ["localhost"] + env_allowed_hosts
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + env_allowed_hosts
 
 
 # Application definition
