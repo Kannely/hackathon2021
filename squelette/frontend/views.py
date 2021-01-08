@@ -4,11 +4,11 @@ from django.shortcuts import render
 from backend.models import Cat, Kibble
 
 menu = {"menu": [
-    {"name": "Index", "class": "fas fa-cat", "url": "front_index"},
-    {"name": "About", "class": "fas fa-dog", "url": "front_about"},
-    {"name": "Animals", "class": "fas fa-heart", "url": "front_animals"},
-    {"name": "Vue", "class": "fas fa-fish", "url": "front_vue"},
-    {"name": "Movies", "class": "fas fa-paw", "url": "front_movies"}
+    {"name": "Index", "class": "fas fa-home", "url": "front_index"},
+    {"name": "Bus", "class": "fas fa-bus", "url": "front_bus"},
+    {"name": "Animals", "class": "fas fa-cat", "url": "front_animals"},
+    {"name": "Vue", "class": "fas fa-eye", "url": "front_vue"},
+    {"name": "Movies", "class": "fas fa-star", "url": "front_movies"}
 ]}
 
 
@@ -16,8 +16,8 @@ def index(request):
     return render(request, "index.html", menu)
 
 
-def about(request):
-    return render(request, "about.html", menu)
+def bus(request):
+    return render(request, "bus.html", menu)
 
 
 def vue(request):

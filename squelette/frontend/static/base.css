@@ -3,7 +3,7 @@ body {
     grid-template-columns: minmax(10em, 10%) 1fr;
     grid-template-rows: 1fr 2em;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     margin: 0;
 }
 
@@ -57,22 +57,28 @@ footer {
 }
 
 input {
-  margin-right: 2%;
-  padding: 1.5vh;
-  color: #313131;
-  appearance: none;
-  
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 255, 255, 0.5);
-  
-  border: 1px solid rgb(100, 100, 100);
-  border-radius: 16px;
-  transition: 0.4s;
+    width: 20%x;
+    margin-right: 2%;
+    padding: 1.5vh;
+    color: #313131;
+    appearance: none;
+
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.5);
+
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 16px;
+    transition: 0.4s;
 }
 
 input:focus {
     border-color: black;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.75);
+}
+
+#filter-input {
+    width: 40%;
+    margin: 1% 0;
 }
 
 button {
@@ -85,4 +91,37 @@ button {
 
 button:hover {
     background-color: rgb(200, 200, 200);
+}
+
+.center {
+    text-align: center;
+}
+
+.center>table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#animals-table {
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#animals-table th {
+  background-color: #8f9cf0;
+  color: white;
+  font-size: 1.2em;
+}
+
+#animals-table tr {
+    line-height: 1.5;
+}
+
+#animals-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#animals-table td, #animals-table th {
+    border: 1px solid #ddd;
+    padding: 0 4vh;
 }
