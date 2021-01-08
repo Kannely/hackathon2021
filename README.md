@@ -14,11 +14,13 @@ Make sure you are on the master branch, otherwise you can change your branch wit
 git checkout master
 ```
 
+Also check that you have Python 3 with a version above 3.6.
+
 ## Creation of virtual environments
 
 ### Windows 
 
-Creation of virtual environments is done by executing the command venv:
+To create a virtual environment for the project, run the following command:
 ```
 python -m venv venv
 ```
@@ -57,8 +59,9 @@ deactivate
 
 ### Linux 
 
+Before proceeding, make sure that virtual environments can be created on your system. You may need to install an additional package before being able to, such as ```python3-venv``` on Debian-based systems.
 
-Creation of virtual environments is done by executing the command venv:
+To create a virtual environment for the project, run the following command:
 ```
 python3 -m venv venv
 ```
@@ -115,3 +118,9 @@ python manage.py migrate
 ```
 
 Note : the process may not be straightforward if the changes in the database are non-trivial to adapt. In such cases, it is necessary to make manual adjustements.
+
+# Deployment
+
+## Scalingo
+
+The branch ```master``` is deployed at the following link : https://hack-squelette.osc-fr1.scalingo.io/
