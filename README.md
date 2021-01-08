@@ -107,6 +107,13 @@ python manage.py createsuperuser
 ```
 Follow the instruction by choosing a username and a password (you can leave a blank e-mail address if you want).
 
+# Utilisation
+
+## Once the server is launched :
+
+#### To access the front-end's index, append ```/front``` at the end of the hostname - for instance, if deployed locally, the hostname is ```localhost```.
+#### Similarly, to access the back-end's index, append ```/back``` at the end of the hostname.
+
 # Development
 
 ## Updating the database's model
