@@ -155,5 +155,6 @@ Finally, run the 2 commands shown on your ```Code``` page.
 
 ### Example
 
-The branch ```master``` is deployed on Scalingo at the following link : hack-scalingo.klethuillier.fr/
-(To access the front-end : hack-scalingo.klethuillier.fr/front )
+The branch ```master``` is deployed on Scalingo at the following link : http://hack-scalingo.klethuillier.fr/
+
+(To access the front-end : http://hack-scalingo.klethuillier.fr/front )
