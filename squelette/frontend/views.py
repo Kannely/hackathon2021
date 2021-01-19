@@ -3,26 +3,16 @@ from django.shortcuts import render
 
 from backend.models import Cat, Kibble
 
-menu = {"menu": [
-    {"name": "Connexion", "url": "front_login", "logged": False},
-    {"name": "Ma fiche", "url": "front_synthesis", "logged": True},    
-    {"name": "Conditions de diplomation", "url": "front_obligations", "logged": True},
-    {"name": "Compétences", "url": "front_skills", "logged": True},
-    {"name": "UEs", "url": "front_courses", "logged": True},
-    {"name": "Déconnexion", "url": "front_logout", "logged": True},
-]}
-
-
 def index(request):
-    return render(request, "index.html", menu)
+    return render(request, "index.html")
 
 
 def bus(request):
-    return render(request, "bus.html", menu)
+    return render(request, "bus.html")
 
 
 def vue(request):
-    return render(request, "vue.html", menu)
+    return render(request, "vue.html")
 
 
 def animals(request):
@@ -31,40 +21,33 @@ def animals(request):
     # for name in names:
     # 	cat = Cat(name=name, age=random.randint(1,18), weight=random.randint(2,10))
     # 	cat.save()
-    context = menu
-    context["cats"] = Cat.objects.all()
+    context = {"cats": Cat.objects.all()}
     print(Cat.objects.all())
     return render(request, "animals.html", context)
 
 
 def movies(request):
-    return render(request, "movies.html", menu)
+    return render(request, "movies.html")
 
 
 def chart(request):
     labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]
     data = [12, 19, 3, 5, 2, 3]
-
-    context = menu
-    context["labels"] = labels
-    context["data"] = data
+    context = {"labels": labels, "data": data}
 
     return render(request, 'chart.html', context)
-
-def login(request):
-    return render(request, "index.html", menu) # TODO
     
 def logout(request):
-    return render(request, "index.html", menu) # TODO
+    return render(request, "index.html") # TODO
 
 def synthesis(request):
-    return render(request, "synthesis.html", menu)
+    return render(request, "synthesis.html")
 
 def obligations(request):
-    return render(request, "obligations.html", menu)
+    return render(request, "obligations.html")
 
 def skills(request):
-    return render(request, "skills.html", menu)
+    return render(request, "skills.html")
 
 def courses(request):
-    return render(request, "courses.html", menu)
+    return render(request, "courses.html")

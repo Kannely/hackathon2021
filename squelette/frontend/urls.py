@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
@@ -10,8 +10,12 @@ urlpatterns = [
     path('vue', views.vue, name='front_vue'),
     path('chart', views.chart, name='front_chart'),
 
-    path('login', views.login, name="front_login"),
-    path('logout', views.logout, name="front_logout"),
+    path('login', auth_views.LoginView.as_view(
+        template_name='login.html'
+    ), name="front_login"),
+    path('logout', auth_views.LogoutView.as_view(
+        template_name='logout.html'
+    ), name="front_logout"),
     path('synthesis', views.synthesis, name='front_synthesis'),
     path('obligations', views.obligations, name='front_obligations'),
     path('skills', views.skills, name='front_skills'),
