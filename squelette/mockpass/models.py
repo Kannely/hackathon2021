@@ -38,14 +38,15 @@ class Formation(models.Model):
 
 
 class UE(models.Model):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=30)
     nom = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     responsable = models.CharField(max_length=100)
     creneau = models.CharField(max_length=1)
     ects_tentes = models.IntegerField()
     c2io = models.BooleanField(default=False)
-
+#Nombre de compétences minimum pour valider l'UE (n)
+#Nombre minimum de jetons à valider (k)
 
 class SuivreUE(models.Model):
     periode = models.ForeignKey(Periode, on_delete=models.CASCADE)
@@ -57,7 +58,12 @@ class SuivreUE(models.Model):
 class Competence(models.Model):
     code = models.CharField(max_length=10)
     nom = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
+    seul1 = models.IntegerField(default=1)
+    seul2 = models.IntegerField(default=1)
+    seul3 = models.IntegerField(default=1)
+    seul4 = models.IntegerField(default=1)
+    seul5 = models.IntegerField(default=1)
 
 
 class EvalCompetence(models.Model):
@@ -71,12 +77,12 @@ class EvalCompetence(models.Model):
 
 
 class Etudiant(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     nom = models.CharField(max_length=32)
     prenom = models.CharField(max_length=32)
     campus = models.CharField(max_length=32)
-    TAFA2 = models.ForeignKey(TAF, on_delete=models.CASCADE)
-    TAFA3 = models.ForeignKey(TAF, on_delete=models.CASCADE)
+    tafA2 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA2')
+    tafA3 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA3')
     periode_actuelle = models.ForeignKey(Periode, on_delete=models.CASCADE)
     formation = models.ForeignKey(Formation, on_delete=models.CASCADE)
     obligations = models.ForeignKey(Obligations, on_delete=models.CASCADE)
