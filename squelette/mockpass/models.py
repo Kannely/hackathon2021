@@ -44,7 +44,7 @@ class UE(models.Model):
     responsable = models.CharField(max_length=100)
     creneau = models.CharField(max_length=1)
     ects_tentes = models.IntegerField()
-    c2io = models.BooleanField()
+    c2io = models.BooleanField(default=False)
 
 
 class SuivreUE(models.Model):
@@ -52,7 +52,6 @@ class SuivreUE(models.Model):
     grade = models.CharField(max_length=3)
     ects_obtenus = models.IntegerField()
     ue = models.ForeignKey(UE, on_delete=models.CASCADE)
-    # one to many eval competence
 
 
 class Competence(models.Model):
@@ -62,6 +61,7 @@ class Competence(models.Model):
 
 
 class EvalCompetence(models.Model):
+    ue = models.ForeignKey(SuivreUE, on_delete=models.CASCADE)
     niveau = models.IntegerField()
     jetons_tentes = models.IntegerField()
     jetons_valides = models.IntegerField()
@@ -80,4 +80,4 @@ class Etudiant(models.Model):
     periode_actuelle = models.ForeignKey(Periode, on_delete=models.CASCADE)
     formation = models.ForeignKey(Formation, on_delete=models.CASCADE)
     obligations = models.ForeignKey(Obligations, on_delete=models.CASCADE)
-    # suivre UE one to many
+    ues = models.ManyToManyField(SuivreUE)
