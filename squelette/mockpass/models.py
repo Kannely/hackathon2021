@@ -21,15 +21,15 @@ class Periode(models.Model):
 class Obligations(models.Model):
     stage = models.IntegerField()
     etranger = models.IntegerField()
-    ielts = models.DecimalField(max_digits=3, decimal_places=1)
+    ielts = models.DecimalField(max_digits=3, decimal_places=1, blank=True)
     choices = [("A1", "A1"),
                ("A2", "A2"),
                ("B1", "B1"),
                ("B2", "B2"),
                ("C1", "C1"),
                ("C2", "C2")]
-    lv1 = models.CharField(max_length=2, choices=choices)
-    lv2 = models.CharField(max_length=2, choices=choices)
+    lv1 = models.CharField(max_length=2, choices=choices, blank=True)
+    lv2 = models.CharField(max_length=2, choices=choices, blank=True)
 
 
 class Formation(models.Model):
@@ -40,8 +40,8 @@ class Formation(models.Model):
 class UE(models.Model):
     code = models.CharField(max_length=30)
     nom = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
-    responsable = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000, blank=True)
+    responsable = models.CharField(max_length=100, blank=True)
     creneau = models.CharField(max_length=1)
     ects_tentes = models.IntegerField()
     c2io = models.BooleanField(default=False)
@@ -50,8 +50,8 @@ class UE(models.Model):
 
 class SuivreUE(models.Model):
     periode = models.ForeignKey(Periode, on_delete=models.CASCADE)
-    grade = models.CharField(max_length=3)
-    ects_obtenus = models.IntegerField()
+    grade = models.CharField(max_length=3, blank=True)
+    ects_obtenus = models.IntegerField(blank=True)
     ue = models.ForeignKey(UE, on_delete=models.CASCADE)
 
 
@@ -68,12 +68,12 @@ class Competence(models.Model):
 
 class EvalCompetence(models.Model):
     ue = models.ForeignKey(SuivreUE, on_delete=models.CASCADE)
+    competence = models.ForeignKey(Competence, on_delete=models.CASCADE)
     niveau = models.IntegerField()
     jetons_tentes = models.IntegerField()
-    jetons_valides = models.IntegerField()
+    jetons_valides = models.IntegerField(blank=True)
     choices = [("+", "+"), ('=', '='), ('-', '-')]
-    note = models.CharField(max_length=1, choices=choices)
-    competence = models.ForeignKey(Competence, on_delete=models.CASCADE)
+    note = models.CharField(max_length=1, choices=choices, blank=True)
 
 
 class Etudiant(models.Model):
@@ -81,8 +81,8 @@ class Etudiant(models.Model):
     nom = models.CharField(max_length=32)
     prenom = models.CharField(max_length=32)
     campus = models.CharField(max_length=32)
-    tafA2 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA2')
-    tafA3 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA3')
+    tafA2 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA2', blank=True)
+    tafA3 = models.ForeignKey(TAF, on_delete=models.CASCADE, related_name='tafA3', blank=True)
     periode_actuelle = models.ForeignKey(Periode, on_delete=models.CASCADE)
     formation = models.ForeignKey(Formation, on_delete=models.CASCADE)
     obligations = models.ForeignKey(Obligations, on_delete=models.CASCADE)
