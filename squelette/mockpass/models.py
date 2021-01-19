@@ -59,11 +59,11 @@ class Competence(models.Model):
     code = models.CharField(max_length=10)
     nom = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
-    seul1 = models.IntegerField(default=1)
-    seul2 = models.IntegerField(default=1)
-    seul3 = models.IntegerField(default=1)
-    seul4 = models.IntegerField(default=1)
-    seul5 = models.IntegerField(default=1)
+    seuil1 = models.IntegerField(default=1)
+    seuil2 = models.IntegerField(default=1)
+    seuil3 = models.IntegerField(default=1)
+    seuil4 = models.IntegerField(default=1)
+    seuil5 = models.IntegerField(default=1)
 
 
 class EvalCompetence(models.Model):
