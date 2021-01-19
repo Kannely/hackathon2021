@@ -13,4 +13,6 @@ class Kibble(models.Model):
     lunch_date = models.DateTimeField('Lunch date')
     weight = models.DecimalField(max_digits=10, decimal_places=2)
 
+# Table obligation avec une clé de formation
+
 
