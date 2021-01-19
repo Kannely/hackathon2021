@@ -1,42 +1,53 @@
 {% extends 'base.html' %}
+
 {% load vue_components %}
 
 {% block script %}
-    {{ "synthesis"|load_component }}
+{{ "synthesis"|load_component }}
 {% endblock %}
 
 {% block content %}
-    <table id="synthesis-table">
-    	<tr>
-			<td>
-				<img src="/static/user.png"/>
-			</td>
-			<td>
-				<h2>Camille DUPONT</h2>
-				<h4>Campus : Nantes</h4>
-				<h4>FISE A2</h4>
-			</td>
-			<td>
-				<table style="width:100%">
-					<td>
-						<h4>PCF</h4>
-						<p>13/13 UEs validées</p>
-						<h4>TAF MPR</h4>
-						<p>6/12 UEs validées</p>
-						<h4>TAF -</h4>
-						<p>-</p>
-					</td>
-					<td>
-						<h4>Année en cours</h4>
-						<p>108 jetons</p>
-						<p>20 ECTS</p>
-						<h4>Total</h4>
-						<p>300 jetons</p>
-						<p>200 ECTS</p>
-					</td>
-				</table>
-			</td>
-		</tr>
-    </table>
-    <synthesis-component />
+<table id="synthesis-table">
+	<tr>
+		<td>
+			<img src="/static/user.png"/>
+		</td>
+		<td>
+			<h2>Camille DUPONT</h2>
+			<h4>Campus : Nantes</h4>
+			<h4>FISE A2</h4>
+		</td>
+		<td>
+			<table style="width:100%">
+				<td>
+					<h4>PCF</h4>
+					<p>13/13 UEs validées</p>
+					<h4>TAF MPR</h4>
+					<p>6/12 UEs validées</p>
+					<h4>TAF -</h4>
+					<p>-</p>
+				</td>
+				<td>
+					<h4>Année en cours</h4>
+					<p>108 jetons</p>
+					<p>20 ECTS</p>
+					<h4>Total</h4>
+					<p>300 jetons</p>
+					<p>200 ECTS</p>
+				</td>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<synthesis-skills-chart />
+		</td>
+		<td>
+			<synthesis-obligations-chart />
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue-chartjs@2.5.7-rc3/dist/vue-chartjs.full.min.js"></script>
 {% endblock %}
