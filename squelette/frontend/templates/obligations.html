@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% load vue_components %}
+
+{% block script %}
+{{ "obligations"|load_component }}
+{% endblock %}
+
 {% block content %}
-    <h1>About our dear website</h1>
+<obligations-table />
 {% endblock %}

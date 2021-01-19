@@ -17,6 +17,7 @@ Vue.component('synthesis-obligations-chart', {
 	extends: VueChartJs.Pie,
 	mounted () {
 		this.renderChart({
+			labels: ["Validé","Non-validé"],
 			datasets: [{
 				label: 'Conditions de diplomation',
 				backgroundColor: ["lightblue","blue"],

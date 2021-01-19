@@ -126,6 +126,8 @@ button:hover {
     padding: 0 4vh;
 }
 
+/* ***** SYNTHESIS ***** */
+
 #synthesis-table {
     width: 100%;
     border-collapse: collapse;
@@ -135,4 +137,10 @@ button:hover {
 
 #synthesis-table img {
     height: 100px;
+}
+
+#synthesis-graph-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;    
 }
