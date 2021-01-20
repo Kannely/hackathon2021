@@ -1,6 +1,7 @@
 import json
 import urllib.request
 
+from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 
 tmdb_key = "70b985ccb055e09129a4adb356172eba"
@@ -26,3 +27,16 @@ def actor(request, name, surname):
         data = json.loads(url.read().decode())
         movies = [movie['original_title'] for movie in data['results']]
     return JsonResponse(movies, safe=False)
+
+
+def get_synthese(request):
+    etudiant_url = 'http://127.0.0.1:8000/pass/etudiant'
+    new_request = urllib.request.Request(etudiant_url)
+    new_request.add_header("Cookie", "cookie1="+request.headers.get('Cookie'))
+    with urllib.request.urlopen(new_request) as url:
+        data = json.loads(url.read().decode())
+        data = serializers.serialize('json', url.read().decode())
+        print(data)
+        data = data[0]
+        print(data)
+        return JsonResponse(data, safe=False)
