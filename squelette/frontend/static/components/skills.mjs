@@ -91,6 +91,7 @@ Vue.component('skill-levels-chart', {
 	    },
 	    data() {
 	        this.updateChart();
+	        console.log(this.data);
 	    }
 	}
 })
