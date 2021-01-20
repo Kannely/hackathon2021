@@ -16,7 +16,7 @@ Vue.component('obligations-table', {
 					<td>{{skill.currently}}</td>
 					<td>{{skill.goal}}</td>
 				</tr>
-			</tbdoy>
+			</tbody>
 		</table>
 	</div>
 	`,

@@ -10,7 +10,6 @@ Vue.component('synthesis-skills-chart', {
 			}]
 		}, {responsive: true, maintainAspectRatio: false})
 	}
-
 })
 
 Vue.component('synthesis-obligations-chart', {
@@ -25,5 +24,4 @@ Vue.component('synthesis-obligations-chart', {
 			}]
 		}, {responsive: true, maintainAspectRatio: false})
 	}
-
 })

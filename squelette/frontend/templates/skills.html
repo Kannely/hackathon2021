@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
+{% load vue_components %}
+
+{% block script %}
+{% load_vue_chart %}
+{{ "skills"|load_component }}
+{% endblock %}
+
+
 {% block content %}
-    <h1>About our dear website</h1>
+<table id="synthesis-graph-table">
+	<tr>
+		<td><skills-menu /></td>
+	</tr>
+</table>
 {% endblock %}
