@@ -9,7 +9,6 @@ from django.forms.models import model_to_dict
 
 PASS_PREFIX = "/pass/"
 
-
 lv_dict = {
     'A1': 1,
     'A2': 2,
@@ -133,10 +132,9 @@ def get_niveau_competences(request):
         comp_data, comp_code = __make_json_request__(request, comp_url, fields_only=True)
         if comp_code == 200:
             niveau = 0
-            seuil = 1
-            while seuil < 6 and bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
-                niveau = seuil
-                seuil += 1
+            for seuil in range(1, 6):
+                if bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
+                    niveau = seuil
             niveaux[comp_data['code']] = niveau
     return niveaux
 
@@ -240,4 +238,3 @@ def get_obligations(request):
             result['percentage'] += min(1.0, result['etudiant']['comp_nv3'] / result['formation']['comp_nv3'])
             result['percentage'] = result['percentage'] / 8
             return JsonResponse(result, status=200, safe=False)
-
