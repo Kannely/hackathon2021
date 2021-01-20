@@ -44,28 +44,35 @@ def get_ue(request, id):
 
 
 def get_competence(request, id):
-    pass
+    obj = Competence.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_periode(request, id):
-    pass
+    obj = Periode.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_taf(request, id):
-    pass
+    obj = TAF.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_ue_suivi(request, id):
-    pass
+    obj = SuivreUE.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_eval_competence(request, id):
-    pass
+    obj = EvalCompetence.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_formation(request, id):
-    pass
+    obj = Formation.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_obligation(request, id):
-    pass
+    obj = Obligations.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
