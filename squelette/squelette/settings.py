@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'frontend.context_processors.add_menu_to_context',
             ],
         },
     },
@@ -79,6 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'squelette.wsgi.application'
 
+LOGIN_REDIRECT_URL = 'front_index'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

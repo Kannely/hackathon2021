@@ -17,14 +17,16 @@
 			<img src="/static/logo_white.png" />
 			<ul>
 			    {% for menuitem in menu %}
-			    <li>
-			        <a href="{% url menuitem.url %}">
-			        {% if menuitem.class %}
-			        <span><i class="{{ menuitem.class }}"></i></span>
-			        {% endif %}
-			        {{ menuitem.name }}
-			        </a>
-			    </li>
+			    {% if menuitem.logged and user.is_authenticated or not menuitem.logged and not user.is_authenticated %}
+			        <li>
+			            <a href="{% url menuitem.url %}">
+			            {% if menuitem.class %}
+			            <span><i class="{{ menuitem.class }}"></i></span>
+			            {% endif %}
+			            {{ menuitem.name }}
+			            </a>
+			        </li>
+			    {% endif %}
 			    {% endfor %}
 			</ul>
 			{% endblock %}
