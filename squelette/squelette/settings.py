@@ -146,3 +146,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# Prefix for mocks
+PASS_PREFIX = '/pass/'
+SSO_PREFIX = '/sso/'
+

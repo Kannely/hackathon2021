@@ -1,10 +1,10 @@
-import json
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+
+import json
 
 import urllib.request
 from urllib.error import HTTPError
-
-PASS_PREFIX = "/pass/"
 
 
 # Create your views here.
@@ -13,7 +13,7 @@ def index(request):
 
 
 def __get_pass_url__(request, suffix):
-    return request.build_absolute_uri(PASS_PREFIX + suffix)
+    return request.build_absolute_uri(settings.PASS_PREFIX + suffix)
 
 
 def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
