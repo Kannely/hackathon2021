@@ -1,8 +1,11 @@
 import json
+
 from django.http import HttpResponse, JsonResponse
 
 import urllib.request
 from urllib.error import HTTPError
+from .models import *
+from django.forms.models import model_to_dict
 
 PASS_PREFIX = "/pass/"
 
@@ -175,7 +178,6 @@ def get_ects(request):
     result = {'current_year': 0, 'total': 0}
     for ue in ues:
         result['total'] += ue['ects_obtenus']
-
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     if etudiant_code == 200:
@@ -186,3 +188,18 @@ def get_ects(request):
             for ue in year:
                 result['current_year'] += ue['ects_obtenus']
     return JsonResponse(result, status=200)
+
+
+def get_obligations(request):
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    if etudiant_code == 200:
+        url = __get_pass_url__(request, 'obligation/' + str(etudiant_data['obligations']))
+        obl_data, obl_code = __make_json_request__(request, url, fields_only=True)
+        formation_url = __get_pass_url__(request, 'formation/' + str(etudiant_data['formation']))
+        formation_data, formation_code = __make_json_request__(request, formation_url, fields_only=True)
+        if formation_code == 200:
+            obj = Obligations.objects.filter(formation=formation_data['code']).first()
+            obj = model_to_dict(obj)
+            result = {'etudiant': obl_data, 'formation': obj}
+            return JsonResponse(result, status=200, safe=False)
