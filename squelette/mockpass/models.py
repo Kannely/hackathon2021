@@ -45,10 +45,8 @@ class UE(models.Model):
     creneau = models.CharField(max_length=1)
     ects_tentes = models.IntegerField()
     c2io = models.BooleanField(default=False)
-
-
-# Nombre de compétences minimum pour valider l'UE (n)
-# Nombre minimum de jetons à valider (k)
+    # Nombre de compétences minimum pour valider l'UE (n)
+    # Nombre minimum de jetons à valider (k)
 
 
 class Competence(models.Model):
