@@ -144,3 +144,22 @@ button:hover {
     border-collapse: collapse;
     text-align: center;    
 }
+
+/* ***** OBLIGATIONS ***** */
+
+#obligations-table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+#obligations-table th {
+    background-color: darkgray;
+    font-style: bold;
+    text-align: center;    
+    color: white;
+}
+
+.obligations-category {
+    background-color: lightgray;
+    font-style: bold;
+}
