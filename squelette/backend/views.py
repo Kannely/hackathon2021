@@ -60,7 +60,7 @@ def get_synthesis(request):
     return JsonResponse(etudiant_data, status=etudiant_code)
 
 
-def get_suivre_ue(request):
+def get_suivre_ue(request, periode=None):
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     all_suivre_ues = []
@@ -69,14 +69,18 @@ def get_suivre_ue(request):
             suivre_ue_url = __get_pass_url__(request, 'ue_suivi/' + str(id))
             suivre_ue_data, suivre_ue_code = __make_json_request__(request, suivre_ue_url, fields_only=True)
             if suivre_ue_code == 200:
-                all_suivre_ues.append(suivre_ue_data)
-            else:
-                return None  # TODO
+                if periode is None:
+                    all_suivre_ues.append(suivre_ue_data)
+                else:
+                    periode_url = __get_pass_url__(request, 'periode/' + str(suivre_ue_data['periode']))
+                    periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+                    if periode_code == 200 and (periode_data['code'].find(periode) != -1):
+                        all_suivre_ues.append(suivre_ue_data)
     return all_suivre_ues
 
 
-def get_eval_competences(request):
-    ues = get_suivre_ue(request)
+def get_eval_competences(request, periode=None):
+    ues = get_suivre_ue(request, periode)
     competences = []
     for ue in ues:
         competences += ue['competences']
@@ -91,8 +95,8 @@ def get_eval_competences(request):
     return all_eval_comp
 
 
-def get_bilan_competence(request):
-    evals = get_eval_competences(request)
+def get_bilan_competence(request, periode=None):
+    evals = get_eval_competences(request, periode)
     default = {'win': 0, 'loose': 0}
     bilan = {}
     for e in evals:
@@ -137,12 +141,48 @@ def get_ue_per_year(request):
     ues = get_suivre_ue(request)
     ue_per_year = {'A1': {'valide': 0, 'tente': 0}, 'A2': {'valide': 0, 'tente': 0}, 'A3': {'valide': 0, 'tente': 0}}
     for ue in ues:
-
         periode_url = __get_pass_url__(request, 'periode/' + str(ue['periode']))
         periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
         if periode_code == 200:
             ue_per_year[periode_data['code'][:2]]['tente'] += 1
-            if ue['ects_obtenus']is not None and ue['ects_obtenus'] > 0:
+            if ue['ects_obtenus'] is not None and ue['ects_obtenus'] > 0:
                 ue_per_year[periode_data['code'][:2]]['valide'] += 1
-
     return JsonResponse(ue_per_year, status=200)
+
+
+def get_jetons(request):
+    bilan = get_bilan_competence(request)
+    result = {'current_year': 0, 'total': 0}
+    for k in bilan.keys():
+        for l in bilan[k].keys():
+            result['total'] += bilan[k][l]['win']
+
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    if etudiant_code == 200:
+        periode_url = __get_pass_url__(request, 'periode/' + str(etudiant_data['periode_actuelle']))
+        periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+        if periode_code == 200:
+            year = get_bilan_competence(request, periode=periode_data['code'][:2])
+            for k in year.keys():
+                for l in year[k].keys():
+                    result['current_year'] += year[k][l]['win']
+    return JsonResponse(result, status=200)
+
+
+def get_ects(request):
+    ues = get_suivre_ue(request)
+    result = {'current_year': 0, 'total': 0}
+    for ue in ues:
+        result['total'] += ue['ects_obtenus']
+
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    if etudiant_code == 200:
+        periode_url = __get_pass_url__(request, 'periode/' + str(etudiant_data['periode_actuelle']))
+        periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+        if periode_code == 200:
+            year = get_suivre_ue(request, periode=periode_data['code'][:2])
+            for ue in year:
+                result['current_year'] += ue['ects_obtenus']
+    return JsonResponse(result, status=200)
