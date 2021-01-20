@@ -196,10 +196,28 @@ def get_obligations(request):
     if etudiant_code == 200:
         url = __get_pass_url__(request, 'obligation/' + str(etudiant_data['obligations']))
         obl_data, obl_code = __make_json_request__(request, url, fields_only=True)
+        obl_data['ects'] = 0
+        ues = get_suivre_ue(request)
+        for ue in ues:
+            obl_data['ects'] += ue['ects_obtenus']
+        obl_data['c2io'] = 0
+        for ue in ues:
+            url = __get_pass_url__(request, 'ue/' + str(ue['ue']))
+            ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+            if ue_code == 200:
+                if ue_data["c2io"]:
+                    obl_data['c2io'] += ue['ects_obtenus']
+        obl_data['comp_nv3'] = 0
+        niveau_dict = get_niveau_competences(request)
+        for k in niveau_dict.keys():
+            if k[:2] == 'CG' and niveau_dict[k] > 0:
+                obl_data['comp_nv3'] += 1
         formation_url = __get_pass_url__(request, 'formation/' + str(etudiant_data['formation']))
         formation_data, formation_code = __make_json_request__(request, formation_url, fields_only=True)
         if formation_code == 200:
             obj = Obligations.objects.filter(formation=formation_data['code']).first()
             obj = model_to_dict(obj)
+            del obj['id']
+            del obj['formation']
             result = {'etudiant': obl_data, 'formation': obj}
             return JsonResponse(result, status=200, safe=False)
