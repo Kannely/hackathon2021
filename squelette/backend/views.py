@@ -36,7 +36,7 @@ def get_synthesis(request):
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     if etudiant_code == 200:
         for taf in ['tafA2', 'tafA3']:
-            if etudiant_data[taf] == 'null':
+            if etudiant_data[taf] == None:
                 etudiant_data[taf] = '-'
             else:
                 taf_url = __get_pass_url__(request, 'taf/'+str(etudiant_data[taf]))
