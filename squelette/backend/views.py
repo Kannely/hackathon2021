@@ -132,3 +132,17 @@ def get_comp_gen(request):
             del gen_dict[key]
     return JsonResponse(gen_dict, status=200)
 
+
+def get_ue_per_year(request):
+    ues = get_suivre_ue(request)
+    ue_per_year = {'A1': {'valide': 0, 'tente': 0}, 'A2': {'valide': 0, 'tente': 0}, 'A3': {'valide': 0, 'tente': 0}}
+    for ue in ues:
+
+        periode_url = __get_pass_url__(request, 'periode/' + str(ue['periode']))
+        periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+        if periode_code == 200:
+            ue_per_year[periode_data['code'][:2]]['tente'] += 1
+            if ue['ects_obtenus']is not None and ue['ects_obtenus'] > 0:
+                ue_per_year[periode_data['code'][:2]]['valide'] += 1
+
+    return JsonResponse(ue_per_year, status=200)
