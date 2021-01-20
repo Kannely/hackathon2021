@@ -8,6 +8,9 @@ tmdb_key = "70b985ccb055e09129a4adb356172eba"
 
 PASS_PREFIX = "/pass/"
 
+def get_pass_url(request, suffix):
+    return request.build_absolute_uri(PASS_PREFIX + suffix)
+
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
@@ -31,7 +34,7 @@ def actor(request, name, surname):
 
 
 def get_synthesis(request):
-    etudiant_url = request.build_absolute_uri(PASS_PREFIX + 'etudiant')
+    etudiant_url = get_pass_url(request, 'etudiant')
     cookie = request.headers.get("Cookie")
     new_request = urllib.request.Request(etudiant_url)
     if cookie:
