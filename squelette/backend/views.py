@@ -7,13 +7,13 @@ from urllib.error import HTTPError
 PASS_PREFIX = "/pass/"
 
 
-def __get_pass_url__(request, suffix):
-    return request.build_absolute_uri(PASS_PREFIX + suffix)
-
-
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
+
+
+def __get_pass_url__(request, suffix):
+    return request.build_absolute_uri(PASS_PREFIX + suffix)
 
 
 def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
