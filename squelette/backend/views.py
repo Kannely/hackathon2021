@@ -43,8 +43,18 @@ def get_synthesis(request):
                 taf_data, taf_code = __make_json_request__(request, taf_url, fields_only=True)
                 if taf_code == 200:
                     etudiant_data[taf] = taf_data['code']
+
         formation_url = __get_pass_url__(request, 'formation/'+str(etudiant_data['formation']))
         formation_data, formation_code = __make_json_request__(request, formation_url, fields_only=True)
         if formation_code == 200:
             etudiant_data['formation'] = formation_data['code']
+
+        periode_url = __get_pass_url__(request, 'periode/'+str(etudiant_data['periode_actuelle']))
+        periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+        if periode_code == 200:
+            etudiant_data['formation'] = etudiant_data['formation'] + periode_data['code'][:2]
+
+        del etudiant_data['obligations']
+        del etudiant_data['ues']
+        del etudiant_data['periode_actuelle']
     return JsonResponse(etudiant_data, status=etudiant_code)
