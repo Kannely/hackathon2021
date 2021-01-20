@@ -16,7 +16,7 @@ def index(request):
 def get_etudiant(request):
     id = request.user.pk
     if request.user.is_authenticated:
-        response = Etudiant.objects.get(pk=id)
+        response = Etudiant.objects.get(user=id)
         response = serializers.serialize('json', [response,])
     else:
         response = ''
