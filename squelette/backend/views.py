@@ -32,7 +32,7 @@ def actor(request, name, surname):
         movies = [movie['original_title'] for movie in data['results']]
     return JsonResponse(movies, safe=False)
 
-def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
+def __make_json_request__(request, url, transfer_cookie=True, array=True, fields_only=False):
     cookie = request.headers.get("Cookie")
     new_request = urllib.request.Request(url)
     if transfer_cookie and cookie:
@@ -41,7 +41,10 @@ def __make_json_request__(request, url, transfer_cookie=True, fields_only=False)
         url = urllib.request.urlopen(new_request)
         data = json.loads(url.read().decode())
         if fields_only:
-            data = data[0]['fields']
+            if array:
+                data = data[1:-1]['fields']
+            else:
+                data = data[0]['fields']
         return data, 200
     except HTTPError as err:
         return {}, err.code
