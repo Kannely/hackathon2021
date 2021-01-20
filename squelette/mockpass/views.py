@@ -38,41 +38,41 @@ def get_etudiant(request):
     return __get_json_or_404__(etudiant, array=False)
 
 
-def get_ue(request, id):
-    obj = UE.objects.filter(pk=id).first()
+def get_ue(request, _id):
+    obj = UE.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_competence(request, id):
-    obj = Competence.objects.filter(pk=id).first()
+def get_competence(request, _id):
+    obj = Competence.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_periode(request, id):
-    obj = Periode.objects.filter(pk=id).first()
+def get_periode(request, _id):
+    obj = Periode.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_taf(request, id):
-    obj = TAF.objects.filter(pk=id).first()
+def get_taf(request, _id):
+    obj = TAF.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_ue_suivi(request, id):
-    obj = SuivreUE.objects.filter(pk=id).first()
+def get_ue_suivi(request, _id):
+    obj = SuivreUE.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_eval_competence(request, id):
-    obj = EvalCompetence.objects.filter(pk=id).first()
+def get_eval_competence(request, _id):
+    obj = EvalCompetence.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_formation(request, id):
-    obj = Formation.objects.filter(pk=id).first()
+def get_formation(request, _id):
+    obj = Formation.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
 
 
-def get_obligation(request, id):
-    obj = Obligations.objects.filter(pk=id).first()
+def get_obligation(request, _id):
+    obj = Obligations.objects.filter(pk=_id).first()
     return __get_json_or_404__(obj, array=False)
