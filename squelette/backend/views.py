@@ -1,7 +1,5 @@
 import json
 import urllib.request
-
-from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 
 tmdb_key = "70b985ccb055e09129a4adb356172eba"
@@ -35,8 +33,7 @@ def get_synthese(request):
     new_request.add_header("Cookie", "cookie1="+request.headers.get('Cookie'))
     with urllib.request.urlopen(new_request) as url:
         data = json.loads(url.read().decode())
-        data = serializers.serialize('json', url.read().decode())
-        print(data)
-        data = data[0]
+        data = json.loads(data[1:-1])
+        data = data['fields']
         print(data)
         return JsonResponse(data, safe=False)
