@@ -15,6 +15,9 @@ def vue(request):
 
 def movies(request):
     return render(request, "movies.html")
+    
+def login(request):
+    return render(request, "login.html")
 
 
 def chart(request):
@@ -23,9 +26,6 @@ def chart(request):
     context = {"labels": labels, "data": data}
 
     return render(request, 'chart.html', context)
-    
-def logout(request):
-    return render(request, "index.html") # TODO
 
 def synthesis(request):
     return render(request, "synthesis.html")

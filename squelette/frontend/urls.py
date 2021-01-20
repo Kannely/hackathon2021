@@ -9,9 +9,7 @@ urlpatterns = [
     path('vue', views.vue, name='front_vue'),
     path('chart', views.chart, name='front_chart'),
 
-    path('login', auth_views.LoginView.as_view(
-        template_name='login.html'
-    ), name="front_login"),
+    path('login', views.login, name="front_login"),
     path('logout', auth_views.LogoutView.as_view(
         template_name='logout.html'
     ), name="front_logout"),
