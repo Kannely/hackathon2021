@@ -10,6 +10,16 @@ from django.forms.models import model_to_dict
 PASS_PREFIX = "/pass/"
 
 
+lv_dict = {
+    'A1': 1,
+    'A2': 2,
+    'B1': 3,
+    'B2': 4,
+    'C1': 5,
+    'C2': 6
+}
+
+
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
@@ -219,5 +229,15 @@ def get_obligations(request):
             obj = model_to_dict(obj)
             del obj['id']
             del obj['formation']
-            result = {'etudiant': obl_data, 'formation': obj}
+            result = {'etudiant': obl_data, 'formation': obj, "percentage": 0}
+            result['percentage'] += min(1.0, result['etudiant']['stage'] / result['formation']['stage'])
+            result['percentage'] += min(1.0, result['etudiant']['etranger'] / result['formation']['etranger'])
+            result['percentage'] += min(1.0, float(result['etudiant']['ielts']) / float(result['formation']['ielts']))
+            result['percentage'] += min(1.0, lv_dict[result['etudiant']['lv1']] / lv_dict[result['formation']['lv1']])
+            result['percentage'] += min(1.0, lv_dict[result['etudiant']['lv2']] / lv_dict[result['formation']['lv2']])
+            result['percentage'] += min(1.0, result['etudiant']['ects'] / result['formation']['ects'])
+            result['percentage'] += min(1.0, result['etudiant']['c2io'] / result['formation']['c2io'])
+            result['percentage'] += min(1.0, result['etudiant']['comp_nv3'] / result['formation']['comp_nv3'])
+            result['percentage'] = result['percentage'] / 8
             return JsonResponse(result, status=200, safe=False)
+
