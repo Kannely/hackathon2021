@@ -11,6 +11,7 @@ from .models import *
 def index(request):
     return HttpResponse("Hello, world. This is PASS !")
 
+
 def __get_etudiant_from_request__(request):
     if request.user.is_authenticated:
         _id = request.user.pk
@@ -18,7 +19,8 @@ def __get_etudiant_from_request__(request):
         if etudiant:
             return etudiant
     return None
-    
+
+
 def __get_json_or_404__(obj, array=True):
     if array:
         if obj and len(obj) > 0 and obj[0]:
@@ -29,6 +31,7 @@ def __get_json_or_404__(obj, array=True):
             response = serializers.serialize('json', [obj])
             return JsonResponse(response, safe=False)
     return JsonResponse({}, status=404)
+
 
 def get_etudiant(request):
     etudiant = __get_etudiant_from_request__(request)
