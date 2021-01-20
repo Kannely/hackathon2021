@@ -22,5 +22,7 @@ def __get_etudiant_from_request__(request):
 def get_etudiant(request):
     etudiant = __get_etudiant_from_request__(request)
     if etudiant:
-        response = 
-        return JsonResponse()
+        response = serializers.serialize('json', [etudiant,])
+        return JsonResponse(etudiant, safe=False)
+    else:
+        return JsonResponse({}, status=404)
