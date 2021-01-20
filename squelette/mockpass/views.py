@@ -39,7 +39,8 @@ def get_etudiant(request):
 
 
 def get_ue(request, id):
-    pass
+    obj = UE.objects.filter(pk=id).first()
+    return __get_json_or_404__(obj, array=False)
 
 
 def get_competence(request, id):
