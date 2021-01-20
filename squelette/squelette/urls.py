@@ -20,5 +20,6 @@ urlpatterns = [
     path('front/', include('frontend.urls')),
     path('back/', include('backend.urls')),
     path('pass/', include('mockpass.urls')),
+    path('sso/', include('mocksso.urls')),
     path('admin/', admin.site.urls)
 ]
