@@ -36,3 +36,35 @@ def __get_json_or_404__(obj, array=True):
 def get_etudiant(request):
     etudiant = __get_etudiant_from_request__(request)
     return __get_json_or_404__(etudiant, array=False)
+
+
+def get_ue(request, id):
+    pass
+
+
+def get_competence(request, id):
+    pass
+
+
+def get_periode(request, id):
+    pass
+
+
+def get_taf(request, id):
+    pass
+
+
+def get_ue_suivi(request, id):
+    pass
+
+
+def get_eval_competence(request, id):
+    pass
+
+
+def get_formation(request, id):
+    pass
+
+
+def get_obligation(request, id):
+    pass

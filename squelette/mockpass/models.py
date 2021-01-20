@@ -21,15 +21,15 @@ class Periode(models.Model):
 class Obligations(models.Model):
     stage = models.IntegerField()
     etranger = models.IntegerField()
-    ielts = models.DecimalField(max_digits=3, decimal_places=1, blank=True)
+    ielts = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     choices = [("A1", "A1"),
                ("A2", "A2"),
                ("B1", "B1"),
                ("B2", "B2"),
                ("C1", "C1"),
                ("C2", "C2")]
-    lv1 = models.CharField(max_length=2, choices=choices, blank=True)
-    lv2 = models.CharField(max_length=2, choices=choices, blank=True)
+    lv1 = models.CharField(max_length=2, choices=choices, blank=True, null=True)
+    lv2 = models.CharField(max_length=2, choices=choices, blank=True, null=True)
 
 
 class Formation(models.Model):
@@ -40,25 +40,21 @@ class Formation(models.Model):
 class UE(models.Model):
     code = models.CharField(max_length=30)
     nom = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, blank=True)
-    responsable = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
+    responsable = models.CharField(max_length=100, blank=True, null=True)
     creneau = models.CharField(max_length=1)
     ects_tentes = models.IntegerField()
     c2io = models.BooleanField(default=False)
-#Nombre de compétences minimum pour valider l'UE (n)
-#Nombre minimum de jetons à valider (k)
 
-class SuivreUE(models.Model):
-    periode = models.ForeignKey(Periode, on_delete=models.CASCADE)
-    grade = models.CharField(max_length=3, blank=True)
-    ects_obtenus = models.IntegerField(blank=True)
-    ue = models.ForeignKey(UE, on_delete=models.CASCADE)
+
+# Nombre de compétences minimum pour valider l'UE (n)
+# Nombre minimum de jetons à valider (k)
 
 
 class Competence(models.Model):
     code = models.CharField(max_length=10)
     nom = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     seuil1 = models.IntegerField(default=1)
     seuil2 = models.IntegerField(default=1)
     seuil3 = models.IntegerField(default=1)
@@ -67,13 +63,20 @@ class Competence(models.Model):
 
 
 class EvalCompetence(models.Model):
-    ue = models.ForeignKey(SuivreUE, on_delete=models.CASCADE)
     competence = models.ForeignKey(Competence, on_delete=models.CASCADE)
     niveau = models.IntegerField()
     jetons_tentes = models.IntegerField()
     jetons_valides = models.IntegerField(blank=True)
     choices = [("+", "+"), ('=', '='), ('-', '-')]
-    note = models.CharField(max_length=1, choices=choices, blank=True)
+    note = models.CharField(max_length=1, choices=choices, blank=True, null=True)
+
+
+class SuivreUE(models.Model):
+    periode = models.ForeignKey(Periode, on_delete=models.CASCADE)
+    grade = models.CharField(max_length=3, blank=True, null=True)
+    ects_obtenus = models.IntegerField(blank=True, null=True)
+    ue = models.ForeignKey(UE, on_delete=models.CASCADE)
+    competences = models.ManyToManyField(EvalCompetence)
 
 
 class Etudiant(models.Model):
