@@ -1,9 +1,12 @@
 import json
-import urllib.request
 from django.http import HttpResponse, JsonResponse
+
+import urllib.request
+from urllib.error import HTTPError
 
 tmdb_key = "70b985ccb055e09129a4adb356172eba"
 
+PASS_PREFIX = "/pass/"
 
 # Create your views here.
 def index(request):
@@ -27,13 +30,16 @@ def actor(request, name, surname):
     return JsonResponse(movies, safe=False)
 
 
-def get_synthese(request):
-    etudiant_url = 'http://127.0.0.1:8000/pass/etudiant'
+def get_synthesis(request):
+    etudiant_url = request.build_absolute_uri(PASS_PREFIX + 'etudiant')
+    cookie = request.headers.get("Cookie")
     new_request = urllib.request.Request(etudiant_url)
-    new_request.add_header("Cookie", "cookie1="+request.headers.get('Cookie'))
-    with urllib.request.urlopen(new_request) as url:
+    if cookie:
+        new_request.add_header("Cookie", cookie)
+    try:
+        url = urllib.request.urlopen(new_request)
         data = json.loads(url.read().decode())
-        data = json.loads(data[1:-1])
-        data = data['fields']
-        print(data)
-        return JsonResponse(data, safe=False)
+        data = data[0]['fields']
+        return JsonResponse(data)
+    except HTTPError as err:
+        return JsonResponse({}, status=err.code)
