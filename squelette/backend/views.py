@@ -16,7 +16,7 @@ def __get_pass_url__(request, suffix):
     return request.build_absolute_uri(PASS_PREFIX + suffix)
 
 
-def __make_json_request__(request, url, transfer_cookie=True, array=True, fields_only=False):
+def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
     cookie = request.headers.get("Cookie")
     new_request = urllib.request.Request(url)
     if transfer_cookie and cookie:
@@ -25,10 +25,7 @@ def __make_json_request__(request, url, transfer_cookie=True, array=True, fields
         url = urllib.request.urlopen(new_request)
         data = json.loads(url.read().decode())
         if fields_only:
-            if array:
-                data = data[1:-1]['fields']
-            else:
-                data = data[0]['fields']
+            data = data[0]['fields']
         return data, 200
     except HTTPError as err:
         return {}, err.code
