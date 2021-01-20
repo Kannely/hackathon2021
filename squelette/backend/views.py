@@ -8,7 +8,7 @@ tmdb_key = "70b985ccb055e09129a4adb356172eba"
 
 PASS_PREFIX = "/pass/"
 
-def get_pass_url(request, suffix):
+def __get_pass_url__(request, suffix):
     return request.build_absolute_uri(PASS_PREFIX + suffix)
 
 # Create your views here.
@@ -32,17 +32,21 @@ def actor(request, name, surname):
         movies = [movie['original_title'] for movie in data['results']]
     return JsonResponse(movies, safe=False)
 
-
-def get_synthesis(request):
-    etudiant_url = get_pass_url(request, 'etudiant')
+def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
     cookie = request.headers.get("Cookie")
-    new_request = urllib.request.Request(etudiant_url)
-    if cookie:
+    new_request = urllib.request.Request(url)
+    if transfer_cookie and cookie:
         new_request.add_header("Cookie", cookie)
     try:
         url = urllib.request.urlopen(new_request)
         data = json.loads(url.read().decode())
-        data = data[0]['fields']
-        return JsonResponse(data)
+        if fields_only:
+            data = data[0]['fields']
+        return data, 200
     except HTTPError as err:
-        return JsonResponse({}, status=err.code)
+        return {}, err.code
+
+def get_synthesis(request):
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    return JsonResponse(etudiant_data, status=etudiant_code)
