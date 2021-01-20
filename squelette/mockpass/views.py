@@ -25,11 +25,11 @@ def __get_json_or_404__(obj, array=True):
     if array:
         if obj and len(obj) > 0 and obj[0]:
             response = serializers.serialize('json', obj)
-            return JsonResponse(response, safe=False)
+            return HttpResponse(response, content_type='application/json')
     else:
         if obj:
             response = serializers.serialize('json', [obj])
-            return JsonResponse(response, safe=False)
+            return HttpResponse(response, content_type='application/json')
     return JsonResponse({}, status=404)
 
 
