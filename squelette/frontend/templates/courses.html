@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% load vue_components %}
+
+{% block script %}
+{% load_vue_chart %}
+{{ "courses"|load_component }}
+{% endblock %}
+
+
 {% block content %}
-    <h1>About our dear website</h1>
+<courses />
 {% endblock %}

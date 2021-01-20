@@ -1,13 +1,15 @@
-Vue.component('skills-menu', {
+Vue.component('skills', {
 	template: `
 	<div>
 		<nav class="nav-two">
 			<div>
 				<ul v-for="category in skills">
-					<li>{{ category.name }}</li>
+					<li><h3>{{ category.name }}</h3></li>
 					<ul v-for="skill in category.skills">
-						<input type="radio" :id="skill" :value="skill" v-model="picked" class="skill-selection" v-on:change="changeSkill()">
-						<label :for="skill" class="skill-selection">{{ skill }}</label>
+						<li>
+							<input type="radio" :id="skill" :value="skill" v-model="picked" class="navbar-selection" v-on:change="changeSkill()">
+							<label :for="skill" class="navbar-selection">{{ skill }}</label>
+						</li>
 					</ul>
 				</ul>
 			</div>

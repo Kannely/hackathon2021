@@ -13,7 +13,6 @@ nav {
     grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 1em;
     background-color: #2a435b;
     color: red;
@@ -58,6 +57,11 @@ footer {
     align-items: center;
     justify-content: center;
     background-color: #ccc;
+}
+
+.normal {
+    font-weight: normal;
+    font-size: 1rem;
 }
 
 input {
@@ -175,7 +179,6 @@ button:hover {
     grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     height: 100%;
     width: 160px;
     position: absolute;
@@ -185,14 +188,19 @@ button:hover {
     padding-top: 20px;
     margin-left: 180px;
     color: black;
-    overflow: hidden;
+    align-items: left;
+    overflow-y: auto;
 }
 
-input.skill-selection {
+.nav-two ul {
+    margin: 0.5em;
+}
+
+input.navbar-selection {
     display: none;
 }
 
-label.skill-selection {
+label.navbar-selection {
     cursor: pointer;
 }
 
@@ -225,5 +233,28 @@ input[type="radio"]:checked+label{
 }
 
 #skill-details-table td {
+    border: 1px solid #AEADAC;
+}
+
+/* ***** COURSES ***** */
+
+#course-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#course-skills-table {
+    width: 100%;
+    border: 1px solid #AEADAC;
+    border-collapse: collapse;
+}
+
+#course-skills-table th {
+    background-color: #2a435b;
+    color: white;
+    font-weight: bold;
+}
+
+#course-skills-table td {
     border: 1px solid #AEADAC;
 }

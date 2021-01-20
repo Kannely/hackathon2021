@@ -74,7 +74,7 @@ Vue.component('synthesis', {
 })
 
 Vue.component('synthesis-skills-chart', {
-	extends: VueChartJs.Bar,
+	extends: VueChartJs.Radar,
 	mounted () {
 		this.renderChart({
 			labels: ["CST1","CST2","CST3","CST4","CST5"],
