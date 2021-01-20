@@ -39,17 +39,17 @@ def get_synthesis(request):
             if etudiant_data[taf] is None:
                 etudiant_data[taf] = '-'
             else:
-                taf_url = __get_pass_url__(request, 'taf/'+str(etudiant_data[taf]))
+                taf_url = __get_pass_url__(request, 'taf/' + str(etudiant_data[taf]))
                 taf_data, taf_code = __make_json_request__(request, taf_url, fields_only=True)
                 if taf_code == 200:
                     etudiant_data[taf] = taf_data['code']
 
-        formation_url = __get_pass_url__(request, 'formation/'+str(etudiant_data['formation']))
+        formation_url = __get_pass_url__(request, 'formation/' + str(etudiant_data['formation']))
         formation_data, formation_code = __make_json_request__(request, formation_url, fields_only=True)
         if formation_code == 200:
             etudiant_data['formation'] = formation_data['code']
 
-        periode_url = __get_pass_url__(request, 'periode/'+str(etudiant_data['periode_actuelle']))
+        periode_url = __get_pass_url__(request, 'periode/' + str(etudiant_data['periode_actuelle']))
         periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
         if periode_code == 200:
             etudiant_data['formation'] = etudiant_data['formation'] + periode_data['code'][:2]
@@ -58,3 +58,77 @@ def get_synthesis(request):
         del etudiant_data['ues']
         del etudiant_data['periode_actuelle']
     return JsonResponse(etudiant_data, status=etudiant_code)
+
+
+def get_suivre_ue(request):
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    all_suivre_ues = []
+    if etudiant_code == 200:
+        for id in etudiant_data['ues']:
+            suivre_ue_url = __get_pass_url__(request, 'ue_suivi/' + str(id))
+            suivre_ue_data, suivre_ue_code = __make_json_request__(request, suivre_ue_url, fields_only=True)
+            if suivre_ue_code == 200:
+                all_suivre_ues.append(suivre_ue_data)
+            else:
+                return None  # TODO
+    return all_suivre_ues
+
+
+def get_eval_competences(request):
+    ues = get_suivre_ue(request)
+    competences = []
+    for ue in ues:
+        competences += ue['competences']
+    all_eval_comp = []
+    for ec in set(competences):
+        eval_competence_url = __get_pass_url__(request, 'eval_competence/' + str(ec))
+        eval_comp_data, eval_comp_code = __make_json_request__(request, eval_competence_url, fields_only=True)
+        if eval_comp_code == 200:
+            all_eval_comp.append(eval_comp_data)
+        else:
+            return None  # TODO
+    return all_eval_comp
+
+
+def get_bilan_competence(request):
+    evals = get_eval_competences(request)
+    default = {'win': 0, 'loose': 0}
+    bilan = {}
+    for e in evals:
+        if e["competence"] not in bilan.keys():
+            bilan[e["competence"]] = {}
+            for i in range(1, 6):
+                bilan[e["competence"]][i] = default.copy()
+        if e["jetons_valides"] is not None:
+            if e["jetons_valides"] == 0:
+                bilan[e["competence"]][e["niveau"]]['loose'] += e["jetons_tentes"]
+            else:
+                bilan[e["competence"]][e["niveau"]]['win'] += e["jetons_valides"]
+    return bilan
+
+
+def get_niveau_competences(request):
+    bilan = get_bilan_competence(request)
+    niveaux = {}
+    for c in bilan.keys():
+        comp_url = __get_pass_url__(request, 'competence/' + str(c))
+        comp_data, comp_code = __make_json_request__(request, comp_url, fields_only=True)
+        if comp_code == 200:
+            niveau = 0
+            seuil = 1
+            while seuil < 6 and bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
+                niveau = seuil
+                seuil += 1
+            niveaux[comp_data['code']] = niveau
+    return niveaux
+
+
+def get_comp_gen(request):
+    niveau_dict = get_niveau_competences(request)
+    gen_dict = niveau_dict.copy()
+    for key in niveau_dict.keys():
+        if key[:2] != 'CG':
+            del gen_dict[key]
+    return JsonResponse(gen_dict, status=200)
+
