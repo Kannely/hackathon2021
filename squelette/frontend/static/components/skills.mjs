@@ -20,10 +20,10 @@ Vue.component('skills-menu', {
 						<h3>Description :</h3>
 						<p>{{ description }}</p>
 					</td>
-					<td><skill-levels-chart style="height: 200px;"/></td>
+					<td><skill-levels-chart v-bind="getData" style="height: 200px;"/></td>
 				</tbody>
 			</table>
-			<skill-details-table />
+			<skill-details-table v-bind="getData" />
 		</div>
 	</div>
 	`,
@@ -31,7 +31,8 @@ Vue.component('skills-menu', {
 		return {
 			picked: "CSG1",
 			name: "S'engager",
-			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+			data: [1,2,1,2,1]
 		}
 	},
 	methods: {
@@ -52,31 +53,56 @@ Vue.component('skills-menu', {
 			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
 			this.name = 'Coordonner une équipe';
 			this.description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-			console.log(this.picked);
+			this.data = [2,1,2,3,5];
+			this.$root.$emit('myEvent', 'new message!');
 		}
 	},
 	created: function() {
 		this.searchSkills();
+	},
+	computed: {
+		getData() {
+			return {
+				code: this.picked,
+				data: this.data
+			}
+		}
 	}
 })
 
 Vue.component('skill-levels-chart', {
 	extends: VueChartJs.Bar,
-	props: ["name"],
+	props: ["code","data"],
+	methods: {
+		createChart() {
+			console.log(this.code);
+			console.log(this.data);
+			this.renderChart({
+				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
+				datasets: [{
+					label: this.code,
+					backgroundColor: "blue",
+					data: this.data
+				}]
+			}, {responsive: true, maintainAspectRatio: false})
+		}
+	},
 	mounted () {
-		console.log(this.name);
-		this.renderChart({
-			labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
-			datasets: [{
-				label: this.code,
-				backgroundColor: "blue",
-				data: [2,1,2,3,5]
-			}]
-		}, {responsive: true, maintainAspectRatio: false})
+		this.createChart();	
+		this.$root.$on('myEvent', (text) => {
+			this._chart.destroy();
+			this.createChart();	
+		})
+	},
+	computed: {
+		chartData() {
+			return this.code;
+		}
 	}
 })
 
 Vue.component('skill-details-table', {
+	props: ["code"],
 	template: `
 	<table id="skill-details-table">
 		<thead>

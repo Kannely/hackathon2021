@@ -5,6 +5,7 @@ body {
     height: 100vh;
     width: 100%;
     margin: 0;
+    overflow: hidden;
 }
 
 nav {
@@ -15,9 +16,8 @@ nav {
     align-items: center;
     padding: 1em;
     background-color: #2a435b;
-    color: white;
+    color: red;
     width: 160px;
-    margin-right: 2em;
 }
 
 nav > img {
@@ -47,6 +47,7 @@ main {
     grid-column: 2;
     grid-row: 1;
     margin: 2em;
+    padding: 0 20px;
 }
 
 footer {
@@ -156,7 +157,7 @@ button:hover {
 }
 
 #obligations-table th {
-    background-color: darkgray;
+    background-color: #2a435b;
     font-style: bold;
     text-align: center;    
     color: white;
@@ -170,18 +171,21 @@ button:hover {
 /* ***** SKILLS ***** */
 
 .nav-two {
+    grid-column: 1;
+    grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
     width: 160px;
     position: absolute;
     top: 0;
     left: 0;
     background-color: #8AA5BF;
-    overflow-x: hidden;
     padding-top: 20px;
     margin-left: 180px;
     color: black;
+    overflow: hidden;
 }
 
 input.skill-selection {
@@ -210,4 +214,16 @@ input[type="radio"]:checked+label{
 
 #skill-details-table {
     width: 100%;
+    border: 1px solid #AEADAC;
+    border-collapse: collapse;
+}
+
+#skill-details-table th {
+    background-color: #2a435b;
+    color: white;
+    font-weight: bold;
+}
+
+#skill-details-table td {
+    border: 1px solid #AEADAC;
 }
