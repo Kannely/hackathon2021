@@ -167,6 +167,11 @@ Vue.component('course-table', {
 		</table>
 	</div>
 	`,
+	data: function() {
+	    return {
+	        details: {}
+	    };
+	},
 	methods: {
 		searchDetails() {
 			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
