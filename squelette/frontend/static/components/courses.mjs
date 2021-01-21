@@ -4,11 +4,11 @@ Vue.component('courses', {
 		<nav class="nav-two">
 			<div>
 				<ul v-for="slot in courses">
-					<li><h3>Créneau {{ slot.name }}</h3></li>
-					<ul v-for="course in slot.courses">
+					<li><h3>Créneau {{ slot[0] }}</h3></li>
+					<ul v-for="course in slot[1]">
 						<li>
-							<input type="radio" :id="course" :value="course" v-model="picked" class="navbar-selection" v-on:change="changeCourse()">
-							<label :for="course" class="navbar-selection">{{ course }}</label>
+							<input type="radio" :id="course[0]" :value="course[0]" v-model="picked" class="navbar-selection" v-on:change="changeCourse()">
+							<label :for="course[0]" class="navbar-selection">{{ course[0] }}</label>
 						</li>
 					</ul>
 				</ul>
@@ -46,39 +46,28 @@ Vue.component('courses', {
 					'tokens': '2/2',
 					'eval': '+'
 				}
-			]
+			],
+			courses: new Map([
+				['A', [[2,false,false], [4,true,true]]],
+				['B', [[1,false,false], [1,true,false]]]
+			])
 		}
 	},
 	methods: {
 		async searchCourses() {
-			//const response = await fetch(`/back/synthesis`);
-			//this.courses = await response.json();
-			this.courses = [
-				{
-					name : 'A',
-					courses: ['APSA', 'LV1']
-				},
-				{
-					name : 'B',
-					courses: ['AAA','MPO','POLY']
-				},
-				{
-					name : 'C',
-					courses: ['CSA','FUN','LV2']
-				},
-				{
-					name : 'D',
-					courses: ['ATSA','QCM','WEB']
-				},
-				{
-					name : 'E',
-					courses: ['EEE','HACK','PHYS']
-				},
-				{
-					name : 'F',
-					courses: ['DATA','VISU']
-				}
-			]
+			const response = await fetch(`/back/ue_list`);
+			this.info = await response.json();
+			for (var i = 0; i < this.info.length; i++) {
+				var slot = this.info[i].creneau;
+				var courses_slot = [];
+				if (this.courses.has(slot)) {
+					courses_slot = this.courses.get(slot);
+					courses_slot.push([this.info[i].code, this.info[i].termine, this.info[i].en_cours]);
+					this.courses.set(slot, courses_slot);
+				} else {
+					this.courses.set(slot, [[this.info[i].code, this.info[i].termine, this.info[i].en_cours]]);
+				}				
+			}
 		},
 		changeCourse() {
 			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
@@ -90,6 +79,11 @@ Vue.component('courses', {
 	},
 	created: function() {
 		this.searchCourses();
+	},
+	watch: {
+		skills() {
+
+		}
 	}
 })
 
