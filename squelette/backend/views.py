@@ -1,13 +1,12 @@
-import json
-
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+
+import json
 
 import urllib.request
 from urllib.error import HTTPError
 from .models import *
 from django.forms.models import model_to_dict
-
-PASS_PREFIX = "/pass/"
 
 lv_dict = {
     'A1': 1,
@@ -18,14 +17,13 @@ lv_dict = {
     'C2': 6
 }
 
-
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
 
 
 def __get_pass_url__(request, suffix):
-    return request.build_absolute_uri(PASS_PREFIX + suffix)
+    return request.build_absolute_uri(settings.PASS_PREFIX + suffix)
 
 
 def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
@@ -34,8 +32,8 @@ def __make_json_request__(request, url, transfer_cookie=True, fields_only=False)
     if transfer_cookie and cookie:
         new_request.add_header("Cookie", cookie)
     try:
-        url = urllib.request.urlopen(new_request)
-        data = json.loads(url.read().decode())
+        response = urllib.request.urlopen(new_request)
+        data = json.loads(response.read().decode())
         if fields_only:
             data = data[0]['fields']
         return data, 200

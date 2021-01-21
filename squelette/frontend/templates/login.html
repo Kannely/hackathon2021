@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block script %}
+    <script src="/static/login.js"></script>
+{% endblock %}
+
 {% block content %}
     {% if form.non_field_errors %}
       <div class="alert alert-danger" role="alert">
