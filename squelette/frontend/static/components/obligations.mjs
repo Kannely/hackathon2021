@@ -12,9 +12,9 @@ Vue.component('obligations-table', {
 					<td colspan="3">{{obligation.name}}</td>
 				</tr>
 				<tr v-for="(value,id) in obligation.skills">
-					<td>{{id}}</td>
 					<td>{{value[0]}}</td>
 					<td>{{value[1]}}</td>
+					<td>{{value[2]}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -26,24 +26,24 @@ Vue.component('obligations-table', {
 				{
 					name: 'Général',
 					skills: {
-						ects: [1,2],
-						c2io: [],
-						comp_nv3: []
+						ects: ["ECTS"],
+						c2io: ["C2IO"],
+						comp_nv3: ["Compétences de niveau 3"]
 					}
 				},
 				{
 					name: 'Expériences',
 					skills: {
-						stage: [],
-						etranger: []
+						stage: ["Professionnelles"],
+						etranger: ["A l'étranger"]
 					}
 				},
 				{
 					name: 'Langues',
 					skills: {
-						ielts: [],
-						lv1: [],
-						lv2: []
+						ielts: ["IELTS"],
+						lv1: ["LV1"],
+						lv2: ["LV2"]
 					}
 				},
 			]
@@ -57,8 +57,8 @@ Vue.component('obligations-table', {
 				var skills = Object.keys(this.obligations[i].skills);
 				for (var j = 0; j < skills.length; j++) {
 					var skill = skills[j];
-					this.obligations[i].skills[skill][0] = this.info["etudiant"][skill];
-					this.obligations[i].skills[skill][1] = this.info["formation"][skill];
+					this.obligations[i].skills[skill][1] = this.info["etudiant"][skill];
+					this.obligations[i].skills[skill][2] = this.info["formation"][skill];
 
 				}
 			}
@@ -67,5 +67,10 @@ Vue.component('obligations-table', {
 	},
 	created: function() {
 		this.searchObligations();
+	},
+	watch: {
+	    obligations() {
+	        console.log('hello');
+	    }
 	}
 })
