@@ -185,7 +185,7 @@ def get_ects(request):
     ues = __get_suivre_ue__(request)
     result = {'current_year': 0, 'total': 0}
     for ue in ues:
-        result['total'] += ue['ects_obtenus']
+        result['total'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     if etudiant_code == 200:
@@ -194,7 +194,7 @@ def get_ects(request):
         if periode_code == 200:
             year = __get_suivre_ue__(request, periode=periode_data['code'][:2])
             for ue in year:
-                result['current_year'] += ue['ects_obtenus']
+                result['current_year'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
     return JsonResponse(result, status=200)
 
 
@@ -259,7 +259,7 @@ def all_ue(request):
         for ue in ues_data:
             pk = ue['pk']
             fields = ue['fields']
-            infos = {'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
+            infos = {'id':pk, 'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
                      'en_cours': pk in en_cours_list}
             result.append(infos)
         return JsonResponse(result, status=200, safe=False)
