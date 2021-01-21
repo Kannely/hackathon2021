@@ -9,14 +9,17 @@ from .models import *
 import urllib.request
 from urllib.error import HTTPError
 
+
 # Create your views here.
 
 def index(request):
     return HttpResponse("Hello, world. This is PASS !")
 
+
 def __get_sso_url__(request, suffix):
     return request.build_absolute_uri(settings.SSO_PREFIX + suffix)
-    
+
+
 def __get_user__(request):
     cookie = request.headers.get("Cookie")
     url = __get_sso_url__(request, "user")
@@ -106,3 +109,8 @@ def get_all_ue(request):
 def get_all_competence(request):
     objs = Competence.objects.all()
     return __get_json_or_404__(objs)
+
+
+def get_eval_comp_from_comp(request, c):
+    obj = EvalCompetence.objects.filter(competence=c)
+    return __get_json_or_404__(obj, array=True)
