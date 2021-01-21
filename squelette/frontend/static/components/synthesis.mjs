@@ -38,10 +38,10 @@ Vue.component('synthesis', {
 			<table id="synthesis-graph-table">
 				<tr>
 					<td>
-						<synthesis-skills-chart style="height: 300px" :data="skills"/>
+						<synthesis-skills-chart style="height: 300px"/>
 					</td>
 					<td>
-						<synthesis-obligations-chart style="height: 300px" :percentage="percentage"/>
+						<synthesis-obligations-chart style="height: 300px"/>
 					</td>
 				</tr>
 			</table>
@@ -61,8 +61,6 @@ Vue.component('synthesis', {
 			courses_a1: { result: 0, total: 0},
 			courses_a2: { result: 0, total: 0},
 			courses_a3: { result: 0, total: 0},
-			skills: new Array(14).fill(0),
-			percentage: 0
 		}
 	},
 	methods: {
@@ -97,21 +95,6 @@ Vue.component('synthesis', {
 			this.courses_a2.total = this.info["A2"]["tente"];
 			this.courses_a3.result = this.info["A3"]["valide"];
 			this.courses_a3.total = this.info["A3"]["tente"];
-		},
-		async searchSkills() {
-			//const response = await fetch(`/back/comp_gen`);
-			//this.info = await response.json();
-			for (var i = 1; i < 15; i++) {
-				//if (this.info["CG"+i] >= 0)
-					this.skills[i-1] = Math.round(Math.random()*5);
-			}
-			console.log(this.skills);
-		},
-		async searchObligations() {
-			const response = await fetch(`/back/obligations`);
-			this.info = await response.json();
-			this.percentage = Math.round(100*this.info["percentage"]);
-			console.log(this.percentage)
 		}
 	},
 	created: function() {
@@ -119,44 +102,57 @@ Vue.component('synthesis', {
 		this.searchTokens();
 		this.searchECTS();
 		this.searchUE();
-		this.searchSkills();
-		this.searchObligations();
 	}
 })
 
 Vue.component('synthesis-skills-chart', {
 	extends: VueChartJs.Radar,
-	props: ["data"],
+	data: function() {
+		return {
+			skills: new Array(14).fill(0)
+		}
+	},
 	methods: {
+		async searchSkills() {
+			const response = await fetch(`/back/comp_gen`);
+			this.info = await response.json();
+			for (var i = 1; i < 15; i++) {
+				if (this.info["CG"+i] >= 0)
+					this.skills[i-1] = this.info["CG"+i];
+			}
+			console.log(this.skills);
+		},
 		createChart() {
 			this.renderChart({
 				labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14],
 				datasets: [{
 					label: 'Niveaux des compétences',
 					backgroundColor: "#679436",
-					data: this.data
+					data: this.skills
 				}]
 			}, {responsive: true, maintainAspectRatio: false})
-		},
-		updateChart() {
-			this._chart.destroy();
-			this.createChart();
 		}
 	},
 	mounted () {
+		this.searchSkills();
 		this.createChart();
-	},
-	watch: {
-		data() {
-			this.updateChart();
-		}
 	}
 })
 
 Vue.component('synthesis-obligations-chart', {
 	extends: VueChartJs.Pie,
-	props: ["percentage"],
+	data: function() {
+		return {
+			percentage: 0
+		}
+	},
 	methods: {
+		async searchObligations() {
+			const response = await fetch(`/back/obligations`);
+			this.info = await response.json();
+			this.percentage = Math.round(100*this.info["percentage"]);
+			console.log(this.percentage)
+		},
 		createChart() {
 			console.log(this.percentage);
 			this.renderChart({
@@ -167,18 +163,10 @@ Vue.component('synthesis-obligations-chart', {
 					data: [this.percentage,100-this.percentage]
 				}]
 			}, {responsive: true, maintainAspectRatio: false})
-		},
-		updateChart() {
-			this._chart.destroy();
-			this.createChart();
 		}
 	},
 	mounted () {
+		this.searchObligations();
 		this.createChart();
-	},
-	watch: {
-	    code() {
-	        this.updateChart();
-	    }
 	}
 })
