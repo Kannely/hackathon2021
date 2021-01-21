@@ -76,8 +76,8 @@ def __get_suivre_ue__(request, periode=None):
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     all_suivre_ues = []
     if etudiant_code == 200:
-        for id in etudiant_data['ues']:
-            suivre_ue_url = __get_pass_url__(request, 'ue_suivi/' + str(id))
+        for ue_id in etudiant_data['ues']:
+            suivre_ue_url = __get_pass_url__(request, 'ue_suivi/' + str(ue_id))
             suivre_ue_data, suivre_ue_code = __make_json_request__(request, suivre_ue_url, fields_only=True)
             if suivre_ue_code == 200:
                 if periode is None:
@@ -265,21 +265,21 @@ def all_ue(request):
 def get_ue_details(request, pk):
     ue_suivi = __get_suivre_ue__(request)
     suivi = False
-    eval = {}
+    evals = {}
     for ue in ue_suivi:
         if ue['ue'] == pk:
             suivi = True
-            eval = ue
+            evals = ue
     url = __get_pass_url__(request, 'ue/' + str(pk))
     ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
     if ue_code == 200:
         ue_data['suivi'] = suivi
         if suivi:
-            periode_url = __get_pass_url__(request, 'periode/' + str(eval['periode']))
+            periode_url = __get_pass_url__(request, 'periode/' + str(evals['periode']))
             periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
-            eval['periode'] = periode_data['code']
-            del eval['ue']
-            ue_data = {**ue_data, **eval}
+            evals['periode'] = periode_data['code']
+            del evals['ue']
+            ue_data = {**ue_data, **evals}
         return JsonResponse(ue_data, status=200, safe=False)
 
 
@@ -318,9 +318,9 @@ def get_comp_details(request, pk):
         comp_eval_comp_list.add(e['pk'])
     eval_comp = student_eval_comp_list & comp_eval_comp_list
 
-    all_ue = __get_suivre_ue__(request)
+    all_ues = __get_suivre_ue__(request)
     ue_for_this_comp = []
-    for ue in all_ue:
+    for ue in all_ues:
         if (set(ue['competences']) & eval_comp) != set():
             ue_for_this_comp.append((eval_comp, ue['ue'], ue['periode']))
     ues_details = []
@@ -343,4 +343,4 @@ def get_comp_details(request, pk):
     for seuil in range(1, 6):
         del comp_data['seuil' + str(seuil)]
     comp_data['ue_details'] = ues_details
-    return JsonResponse(comp_data, status=comp_code, safe=False)
+    return JsonResponse(comp_data, status=200, safe=False)
