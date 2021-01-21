@@ -41,7 +41,7 @@ Vue.component('synthesis', {
 						<synthesis-skills-chart style="height: 300px" :data="skills"/>
 					</td>
 					<td>
-						<synthesis-obligations-chart style="height: 300px" :percentages="percentages"/>
+						<synthesis-obligations-chart style="height: 300px" :percentage="percentage"/>
 					</td>
 				</tr>
 			</table>
@@ -62,7 +62,7 @@ Vue.component('synthesis', {
 			courses_a2: { result: 0, total: 0},
 			courses_a3: { result: 0, total: 0},
 			skills: new Array(14).fill(0),
-			percentages: new Array(2).fill(0)
+			percentage: 0
 		}
 	},
 	methods: {
@@ -108,7 +108,10 @@ Vue.component('synthesis', {
 			console.log(this.skills);
 		},
 		async searchObligations() {
-			this.percentages = [30,70];
+			const response = await fetch(`/back/obligations`);
+			this.info = await response.json();
+			this.percentage = Math.round(100*this.info["percentage"]);
+			console.log(this.percentage)
 		}
 	},
 	created: function() {
@@ -152,15 +155,16 @@ Vue.component('synthesis-skills-chart', {
 
 Vue.component('synthesis-obligations-chart', {
 	extends: VueChartJs.Pie,
-	props: ["percentages"],
+	props: ["percentage"],
 	methods: {
 		createChart() {
+			console.log(this.percentage);
 			this.renderChart({
 				labels: ["Validé", "Non-validé"],
 				datasets: [{
 					label: 'Conditions de diplomation',
 					backgroundColor: ["#679436","#d2de81"],
-					data: this.percentages
+					data: [this.percentage,100-this.percentage]
 				}]
 			}, {responsive: true, maintainAspectRatio: false})
 		},

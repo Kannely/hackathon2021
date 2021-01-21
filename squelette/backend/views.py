@@ -185,7 +185,7 @@ def get_ects(request):
     ues = get_suivre_ue(request)
     result = {'current_year': 0, 'total': 0}
     for ue in ues:
-        result['total'] += ue['ects_obtenus']
+        result['total'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     if etudiant_code == 200:
@@ -194,7 +194,7 @@ def get_ects(request):
         if periode_code == 200:
             year = get_suivre_ue(request, periode=periode_data['code'][:2])
             for ue in year:
-                result['current_year'] += ue['ects_obtenus']
+                result['current_year'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
     return JsonResponse(result, status=200)
 
 
@@ -207,7 +207,7 @@ def get_obligations(request):
         obl_data['ects'] = 0
         ues = get_suivre_ue(request)
         for ue in ues:
-            obl_data['ects'] += ue['ects_obtenus']
+            obl_data['ects'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
         obl_data['c2io'] = 0
         for ue in ues:
             url = __get_pass_url__(request, 'ue/' + str(ue['ue']))
