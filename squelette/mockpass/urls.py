@@ -13,6 +13,7 @@ urlpatterns = [
     path('taf/<int:id>', views.get_taf, name='pass_get_taf'),
     path('ue_suivi/<int:id>', views.get_ue_suivi, name='pass_get_ue_suivi'),
     path('eval_competence/<int:id>', views.get_eval_competence, name='pass_get_eval_competence'),
+    path('eval_comp_for_comp/<int:c>', views.get_eval_comp_from_comp, name='pass_get_eval_comp_from_comp'),
     path('formation/<int:id>', views.get_formation, name='pass_get_formation'),
     path('obligation/<int:id>', views.get_obligation, name='pass_get_obligation'),
 ]
