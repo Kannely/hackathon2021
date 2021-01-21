@@ -10,7 +10,7 @@ window.addEventListener('load', () => {
             method: "POST",
             body: form_data
         }).then((response) => {
-            if (response.status == 200) window.location.replace("/front/");
+            if (response.status == 200) window.location.replace("/front/synthesis");
             else window.location.reload();
         }).catch((e) => window.location.reload());
     });
