@@ -7,56 +7,22 @@ Vue.component('courses', {
 					<li><h3>Créneau {{ slot }}</h3></li>
 					<ul v-for="course in slot_courses">
 						<li>
-							<input type="radio" :id="course.code" :value="course.code" v-model="selected_course" class="navbar-selection" @change="updateCourse()">
-							<label :for="course.code" class="navbar-selection">{{ course.code }}</label>
+							<input type="radio" :id="course.id" :value="course.id" v-model="selected_course" class="navbar-selection">
+							<label :for="course.id" class="navbar-selection">{{ course.code }}</label>
 						</li>
 					</ul>
 				</ul>
 			</div>
 		</nav>
 		<div style="margin-left: 200px;">
-			<h1>{{ selected_course }} - {{ selected_course_data.name }}</h1>
-			<h3>Description :</h3>
-			<p>{{ selected_course_data.description }}</p>
-			<h3>Responsable : <span class="normal">{{ selected_course_data.teacher }}</span></h3>
-			<course-table :code="selected_course" />
+			<course-details :id="selected_course"/>
 		</div>
 	</div>
 	`,
 	data: function() {
 		return {
-			courses: [
-				/*{ 
-				    code: '1',
-				    slot: 'A',
-				    in_progress: false,
-				    done: false,
-			    },*/
-			],
-			selected_course: "APSA",
-			selected_course_data: {
-    			name: 'Activité Physique, Sportive et Artistique',
-			    description: 'Plein de sports sympas pour digérer la galette',
-			    teacher: 'Nathalie MARSCHAL',
-			    period: 'A1S1',
-			    grade: 'B',
-			    tokens: '5/6',
-			    ects: '1/1',
-			    skills: [
-				    {
-					    name: 'CG1',
-					    level: 2,
-					    tokens: '1/2',
-					    eval: '='
-				    },
-				    {
-					    name: 'CG1',
-					    level: 3,
-					    tokens: '2/2',
-					    eval: '+'
-				    }
-			    ],
-			}
+			courses: [],
+			selected_course: 3,
 		}
 	},
 	computed: {
@@ -78,6 +44,7 @@ Vue.component('courses', {
 			for (let i = 0; i < this.info.length; i++) {
 				const info_course = this.info[i];
 				const new_course = {
+					id: info_course.id,
 				    code: info_course.code,
 				    slot: info_course.creneau,
 				    in_progress: info_course.en_cours,
@@ -87,13 +54,6 @@ Vue.component('courses', {
 				if (course_index > -1) Vue.set(this.courses, course_index, new_course);
 				else this.courses.push(new_course);			
 			}
-		},
-		updateCourse() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			//this.info = await response.json();
-			this.name = 'Hackathon';
-			this.description = 'On va vous en mettre plein la vue !';
-			this.teacher = 'Hervé GRALL';
 		}
 	},
 	mounted: function() {
@@ -101,22 +61,67 @@ Vue.component('courses', {
 	},
 })
 
-Vue.component('course-table', {
-	props: ["code"],
+Vue.component('course-details', {
+	props: ["id"],
 	template: `
 	<div>
+		<h1>{{ code }} - {{ name }}</h1>
+		<h3>Description :</h3>
+		<p>{{ description }}</p>
+		<h3>Responsable : <span class="normal">{{ teacher }}</span></h3>
 		<table id="course-details-table">
 			<tbody>
 				<tr>
-					<td>Période : {{ details.period }}</td>
-					<td>Grade : {{ details.grade }}</td>
+					<td>Période : {{ period }}</td>
+					<td>Grade : {{ grade }}</td>
 					<td>
-						<tr>Jetons : {{ details.tokens }}</tr>
-						<tr>ECTS : {{ details.ects }}</tr>
+						<tr>Jetons : {{ tokens }}</tr>
+						<tr>ECTS : {{ ects }}</tr>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		<course-table />
+	</div>
+	`,
+	data: function() {
+		return {
+			name: "",
+			code: "",
+			description: "",
+			teacher: "",
+			period: "",
+			grade: "",
+			tokens: "",
+			ects: ""
+		}
+	},
+	methods: {
+		async searchDetails() {
+			const response = await fetch(`/back/ue/${this.id}`);
+			this.info = await response.json();
+			this.code = this.info.code;
+			this.name = this.info.nom;
+			this.description = this.info.description;
+			this.teacher = this.info.responsable;
+			this.period = this.info.periode;
+			this.grade = this.info.grade;
+		}
+	},
+	mounted: function() {
+		this.searchDetails();
+	},
+	watch: {
+		id() {
+			this.searchDetails();
+		}
+	}
+})
+
+Vue.component('course-table', {
+	props: ["code"],
+	template: `
+	<div>
 		<table id="course-skills-table" class="info-table">
 			<thead>
 				<th>Compétence</th>

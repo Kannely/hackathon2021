@@ -7,7 +7,7 @@ Vue.component('skills', {
 					<li><h3>{{ type }}</h3></li>
 					<ul v-for="skill in type_skills">
 						<li>
-							<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection" @change="updateSkill()">
+							<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection">
 							<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
 						</li>
 					</ul>
