@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'frontend.context_processors.add_menu_to_context',
+                'frontend.context_processors.add_authentification_status_to_context',
             ],
         },
     },

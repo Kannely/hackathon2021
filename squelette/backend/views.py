@@ -22,8 +22,8 @@ def __make_json_request__(request, url, transfer_cookie=True, fields_only=False)
     if transfer_cookie and cookie:
         new_request.add_header("Cookie", cookie)
     try:
-        url = urllib.request.urlopen(new_request)
-        data = json.loads(url.read().decode())
+        response = urllib.request.urlopen(new_request)
+        data = json.loads(response.read().decode())
         if fields_only:
             data = data[0]['fields']
         return data, 200

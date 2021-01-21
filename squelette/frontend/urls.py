@@ -10,9 +10,7 @@ urlpatterns = [
     path('chart', views.chart, name='front_chart'),
 
     path('login', views.login, name="front_login"),
-    path('logout', auth_views.LogoutView.as_view(
-        template_name='logout.html'
-    ), name="front_logout"),
+    path('logout', views.logout, name="front_logout"),
     path('synthesis', views.synthesis, name='front_synthesis'),
     path('obligations', views.obligations, name='front_obligations'),
     path('skills', views.skills, name='front_skills'),
