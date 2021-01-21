@@ -1,6 +1,6 @@
 Vue.component('courses', {
 	template: `
-	<div>
+	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
 				<ul v-for="slot in courses">
@@ -19,7 +19,7 @@ Vue.component('courses', {
 			<h3>Description :</h3>
 			<p>{{ description }}</p>
 			<h3>Responsable : <span class="normal">{{ teacher }}</span></h3>
-			<course-details-table :code="picked" />
+			<course-table :code="picked" />
 		</div>
 	</div>
 	`,
@@ -125,11 +125,11 @@ Vue.component('course-levels-chart', {
 	}
 })
 
-Vue.component('course-details-table', {
+Vue.component('course-table', {
 	props: ["code"],
 	template: `
 	<div>
-		<table id="course-skills-table">
+		<table id="course-details-table">
 			<tbody>
 				<tr>
 					<td>Période : {{ details.period }}</td>
@@ -141,7 +141,7 @@ Vue.component('course-details-table', {
 				</tr>
 			</tbody>
 		</table>
-		<table id="course-skills-table">
+		<table id="course-skills-table" class="info-table">
 			<thead>
 				<th>Compétence</th>
 				<th>Niveau</th>

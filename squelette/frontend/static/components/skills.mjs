@@ -1,6 +1,6 @@
 Vue.component('skills', {
 	template: `
-	<div>
+	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
 				<ul v-for="category in skills">
@@ -33,7 +33,7 @@ Vue.component('skills', {
 		return {
 			picked: "CSG1",
 			name: "S'engager",
-			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 			data: [1,2,1,2,1]
 		}
 	},
@@ -72,7 +72,7 @@ Vue.component('skill-levels-chart', {
 				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
 				datasets: [{
 					label: this.code,
-					backgroundColor: "blue",
+					backgroundColor: "#d2de81",
 					data: this.data
 				}]
 			}, {responsive: true, maintainAspectRatio: false})
@@ -99,7 +99,7 @@ Vue.component('skill-levels-chart', {
 Vue.component('skill-details-table', {
 	props: ["code"],
 	template: `
-	<table id="skill-details-table">
+	<table id="skill-details-table" class="info-table">
 		<thead>
 			<th>UE</th>
 			<th>Période</th>

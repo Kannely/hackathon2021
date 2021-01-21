@@ -1,3 +1,12 @@
+:root {
+    --darkblue: #064789;
+    --lightblue: #c3e4fa;
+    --darkgreen: #679436;
+    --lightgreen: #d2de81;
+    --gray: #f5f7fa;
+    --bordergray: #999999;
+}
+
 body {
     display: grid;
     grid-template-columns: minmax(10em, 10%) 1fr;
@@ -5,18 +14,21 @@ body {
     height: 100vh;
     width: 100%;
     margin: 0;
-    overflow: hidden;
+    background-color: var(--gray);
 }
 
 nav {
+    position: fixed;
     grid-column: 1;
     grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
     padding: 1em;
-    background-color: #2a435b;
+    background-color: var(--darkblue);
     color: red;
+    height: 100%;
     width: 160px;
+    z-index: 0;
 }
 
 nav > img {
@@ -38,15 +50,27 @@ nav a {
     line-height: 2;
 }
 
-nav a > span {
-    padding-right: 1em;
+nav span {
+    padding-right: 0.5em;
+}
+
+nav .connexion-link {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 3em;
+}
+
+nav hr {
+    color: white;
+    width: calc(160px + 2em);
+    margin: 1em -2em;
 }
 
 main {
     grid-column: 2;
     grid-row: 1;
-    margin: 2em;
-    padding: 0 20px;
+    margin: 0;
+    padding: 0;
 }
 
 footer {
@@ -62,6 +86,10 @@ footer {
 .normal {
     font-weight: normal;
     font-size: 1rem;
+}
+
+.div-margin {
+    margin: 2em 4em;
 }
 
 input {
@@ -134,6 +162,27 @@ button:hover {
     padding: 0 4vh;
 }
 
+.info-table {
+    width: 100%;
+    border: 1px solid #AEADAC;
+    border-collapse: collapse;
+    line-height: 2em;
+    text-align: center;
+}
+
+.info-table th {
+    background-color: var(--darkgreen);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0 1.5em;
+}
+
+.info-table td {
+    border: 1px solid var(--bordergray);
+    padding: 0 1.5em;
+}
+
 /* ***** SYNTHESIS ***** */
 
 #synthesis-table {
@@ -141,10 +190,17 @@ button:hover {
     border-collapse: collapse;
     text-align: center;
     line-height: 0.5;
+    margin: 0;
+    margin-bottom: 2em;
+    padding: 0;
 }
 
 #synthesis-table img {
     height: 100px;
+}
+
+tr.synthesis-info {
+    background-color: var(--lightblue);
 }
 
 #synthesis-graph-table {
@@ -155,21 +211,14 @@ button:hover {
 
 /* ***** OBLIGATIONS ***** */
 
-#obligations-table {
-    border-collapse: collapse;
-    width: 80%;
-}
-
-#obligations-table th {
-    background-color: #2a435b;
-    font-style: bold;
-    text-align: center;    
-    color: white;
-}
-
 .obligations-category {
-    background-color: lightgray;
-    font-style: bold;
+    background-color: var(--lightgreen);
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#obligations-table {
+    text-align: left;
 }
 
 /* ***** SKILLS ***** */
@@ -181,10 +230,10 @@ button:hover {
     flex-direction: column;
     height: 100%;
     width: 160px;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    background-color: #8AA5BF;
+    background-color: var(--lightblue);
     padding-top: 20px;
     margin-left: 180px;
     color: black;
@@ -220,41 +269,17 @@ input[type="radio"]:checked+label{
     vertical-align: top;
 }
 
-#skill-details-table {
+/* ***** COURSES ***** */
+
+#course-table {
     width: 100%;
-    border: 1px solid #AEADAC;
     border-collapse: collapse;
 }
-
-#skill-details-table th {
-    background-color: #2a435b;
-    color: white;
-    font-weight: bold;
-}
-
-#skill-details-table td {
-    border: 1px solid #AEADAC;
-}
-
-/* ***** COURSES ***** */
 
 #course-details-table {
     width: 100%;
-    border-collapse: collapse;
-}
-
-#course-skills-table {
-    width: 100%;
-    border: 1px solid #AEADAC;
-    border-collapse: collapse;
-}
-
-#course-skills-table th {
-    background-color: #2a435b;
-    color: white;
-    font-weight: bold;
-}
-
-#course-skills-table td {
-    border: 1px solid #AEADAC;
+    font-size: 1.2em;
+    font-weight: 500;
+    line-height: 1.3em;
+    margin: 0.8em 0;
 }
