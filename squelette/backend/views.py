@@ -101,8 +101,6 @@ def __get_eval_competences__(request, periode=None):
         eval_comp_data, eval_comp_code = __make_json_request__(request, eval_competence_url, fields_only=True)
         if eval_comp_code == 200:
             all_eval_comp.append(eval_comp_data)
-        else:
-            return None  # TODO
     return all_eval_comp
 
 
@@ -314,7 +312,7 @@ def get_comp_details(request, pk):
     for ue in ues_suivies:
         student_eval_comp_list = student_eval_comp_list.union(set(ue['competences']))
     url = __get_pass_url__(request, 'eval_comp_for_comp/' + str(pk))
-    all_evals_data, all_evals_code = __make_json_request__(request, url, fields_only=False)
+    all_evals_data, _ = __make_json_request__(request, url, fields_only=False)
     comp_eval_comp_list = set()
     for e in all_evals_data:
         comp_eval_comp_list.add(e['pk'])
@@ -333,7 +331,7 @@ def get_comp_details(request, pk):
         url = __get_pass_url__(request, 'periode/' + str(p))
         periode_data, _ = __make_json_request__(request, url, fields_only=True)
         url = __get_pass_url__(request, 'ue/' + str(ue_id))
-        ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+        ue_data, _ = __make_json_request__(request, url, fields_only=True)
         del eval_comp_data['competence']
         del eval_comp_data['jetons_tentes']
         eval_comp_data['code_ue'] = ue_data['code']
@@ -341,7 +339,7 @@ def get_comp_details(request, pk):
         ues_details.append(eval_comp_data)
 
     url = __get_pass_url__(request, 'competence/' + str(pk))
-    comp_data, comp_code = __make_json_request__(request, url, fields_only=True)
+    comp_data, _ = __make_json_request__(request, url, fields_only=True)
     for seuil in range(1, 6):
         del comp_data['seuil' + str(seuil)]
     comp_data['ue_details'] = ues_details
