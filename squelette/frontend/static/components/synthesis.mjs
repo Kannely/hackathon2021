@@ -120,7 +120,6 @@ Vue.component('synthesis-skills-chart', {
 				if (this.info["CG"+i] >= 0)
 					this.skills[i-1] = this.info["CG"+i];
 			}
-			console.log(this.skills);
 	        this.updateChart(); // We do not watch because not only it would recreate the chart 14 times, but it would also require using Vue.set above
 		},
 		createChart() {
