@@ -1,10 +1,22 @@
 import json
+
 from django.http import HttpResponse, JsonResponse
 
 import urllib.request
 from urllib.error import HTTPError
+from .models import *
+from django.forms.models import model_to_dict
 
 PASS_PREFIX = "/pass/"
+
+lv_dict = {
+    'A1': 1,
+    'A2': 2,
+    'B1': 3,
+    'B2': 4,
+    'C1': 5,
+    'C2': 6
+}
 
 
 # Create your views here.
@@ -120,10 +132,9 @@ def get_niveau_competences(request):
         comp_data, comp_code = __make_json_request__(request, comp_url, fields_only=True)
         if comp_code == 200:
             niveau = 0
-            seuil = 1
-            while seuil < 6 and bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
-                niveau = seuil
-                seuil += 1
+            for seuil in range(1, 6):
+                if bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
+                    niveau = seuil
             niveaux[comp_data['code']] = niveau
     return niveaux
 
@@ -175,7 +186,6 @@ def get_ects(request):
     result = {'current_year': 0, 'total': 0}
     for ue in ues:
         result['total'] += ue['ects_obtenus']
-
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     if etudiant_code == 200:
@@ -186,3 +196,45 @@ def get_ects(request):
             for ue in year:
                 result['current_year'] += ue['ects_obtenus']
     return JsonResponse(result, status=200)
+
+
+def get_obligations(request):
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
+    if etudiant_code == 200:
+        url = __get_pass_url__(request, 'obligation/' + str(etudiant_data['obligations']))
+        obl_data, obl_code = __make_json_request__(request, url, fields_only=True)
+        obl_data['ects'] = 0
+        ues = get_suivre_ue(request)
+        for ue in ues:
+            obl_data['ects'] += ue['ects_obtenus']
+        obl_data['c2io'] = 0
+        for ue in ues:
+            url = __get_pass_url__(request, 'ue/' + str(ue['ue']))
+            ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+            if ue_code == 200:
+                if ue_data["c2io"]:
+                    obl_data['c2io'] += ue['ects_obtenus']
+        obl_data['comp_nv3'] = 0
+        niveau_dict = get_niveau_competences(request)
+        for k in niveau_dict.keys():
+            if k[:2] == 'CG' and niveau_dict[k] > 0:
+                obl_data['comp_nv3'] += 1
+        formation_url = __get_pass_url__(request, 'formation/' + str(etudiant_data['formation']))
+        formation_data, formation_code = __make_json_request__(request, formation_url, fields_only=True)
+        if formation_code == 200:
+            obj = Obligations.objects.filter(formation=formation_data['code']).first()
+            obj = model_to_dict(obj)
+            del obj['id']
+            del obj['formation']
+            result = {'etudiant': obl_data, 'formation': obj, "percentage": 0}
+            result['percentage'] += min(1.0, result['etudiant']['stage'] / result['formation']['stage'])
+            result['percentage'] += min(1.0, result['etudiant']['etranger'] / result['formation']['etranger'])
+            result['percentage'] += min(1.0, float(result['etudiant']['ielts']) / float(result['formation']['ielts']))
+            result['percentage'] += min(1.0, lv_dict[result['etudiant']['lv1']] / lv_dict[result['formation']['lv1']])
+            result['percentage'] += min(1.0, lv_dict[result['etudiant']['lv2']] / lv_dict[result['formation']['lv2']])
+            result['percentage'] += min(1.0, result['etudiant']['ects'] / result['formation']['ects'])
+            result['percentage'] += min(1.0, result['etudiant']['c2io'] / result['formation']['c2io'])
+            result['percentage'] += min(1.0, result['etudiant']['comp_nv3'] / result['formation']['comp_nv3'])
+            result['percentage'] = result['percentage'] / 8
+            return JsonResponse(result, status=200, safe=False)

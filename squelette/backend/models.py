@@ -6,6 +6,9 @@ class Obligations(models.Model):
     choices_f = [("FISE", "FISE")]
     formation = models.CharField(max_length=4, choices=choices_f)
     stage = models.IntegerField()
+    ects = models.IntegerField()
+    c2io = models.IntegerField()
+    comp_nv3 = models.IntegerField()
     etranger = models.IntegerField()
     ielts = models.DecimalField(max_digits=3, decimal_places=1)
     choices_lv = [("A1", "A1"),

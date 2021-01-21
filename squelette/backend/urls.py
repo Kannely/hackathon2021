@@ -9,4 +9,5 @@ urlpatterns = [
     path('ue_per_year', views.get_ue_per_year, name='back_ue_per_year'),
     path('jetons', views.get_jetons, name='back_jetons'),
     path('ects', views.get_ects, name='back_ects'),
+    path('obligations', views.get_obligations, name='back_obligations'),
 ]
