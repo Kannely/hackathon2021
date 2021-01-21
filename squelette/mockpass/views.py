@@ -26,7 +26,7 @@ def __get_user__(request):
     try:
         response = urllib.request.urlopen(new_request)
         data = json.loads(response.read().decode())
-        return data
+        return data[0]
     except HTTPError as err:
         return None
 
@@ -34,7 +34,7 @@ def __get_user__(request):
 def __get_etudiant_from_request__(request):
     user = __get_user__(request)
     if user:
-        _id = user.pk
+        _id = user['pk']
         etudiant = Etudiant.objects.filter(user=_id).first()
         if etudiant:
             return etudiant
