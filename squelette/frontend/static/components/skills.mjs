@@ -3,103 +3,89 @@ Vue.component('skills', {
 	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
-				<ul v-for="category in skills">
-					<li><h3>{{ category.name }}</h3></li>
-					<ul v-for="skill in category.skills">
+				<ul v-for="(type_skills, type) in sorted_skills">
+					<li><h3>{{ type }}</h3></li>
+					<ul v-for="skill in type_skills">
 						<li>
-							<input type="radio" :id="skill" :value="skill" v-model="picked" class="navbar-selection" v-on:change="changeSkill()">
-							<label :for="skill" class="navbar-selection">{{ skill }}</label>
+							<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection" @change="updateSkill()">
+							<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
 						</li>
 					</ul>
 				</ul>
 			</div>
 		</nav>
 		<div style="margin-left: 200px;">
-			<h1>{{ picked }} - {{ name }}</h1>
-			<table id="skills-table">
-				<tbody>
-					<td>
-						<h3>Description :</h3>
-						<p>{{ description }}</p>
-					</td>
-					<td><skill-levels-chart :code="picked" :data="data" style="height: 200px;"/></td>
-				</tbody>
-			</table>
-			<skill-details-table :code="picked" />
+			<skill-details :id="selected_skill"/>
 		</div>
 	</div>
 	`,
 	data: function() {
 		return {
-			picked: "CSG1",
-			name: "S'engager",
-			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-			data: [1,2,1,2,1]
+			skills: [],
+			selected_skill: 1,
 		}
 	},
-	methods: {
-		searchSkills() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			this.skills = [
-				{
-					name : 'Compétences générales',
-					skills: ['CSG1', 'CSG2', 'CSG3']
-				},
-				{
-					name : 'Compétences techniques',
-					skills: ['CST1','CST2']
-				}
-			]
-		},
-		changeSkill() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			this.name = 'Coordonner une équipe';
-			this.description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-			this.data = [2,1,2,3,5];
-		}
-	},
-	created: function() {
-		this.searchSkills();
-	}
-})
-
-Vue.component('skill-levels-chart', {
-	extends: VueChartJs.Bar,
-	props: ["code", "data"],
-	methods: {
-		createChart() {
-			this.renderChart({
-				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
-				datasets: [{
-					label: this.code,
-					backgroundColor: "#d2de81",
-					data: this.data
-				}]
-			}, {responsive: true, maintainAspectRatio: false})
-		},
-		updateChart() {
-			this._chart.destroy();
-			this.createChart();
-		}
-	},
-	mounted () {
-		this.createChart();
-	},
-	watch: {
-	    code() {
-	        this.updateChart();
-	    },
-	    data() {
-	        this.updateChart();
-	        console.log(this.data);
+	computed: {
+	    sorted_skills() {
+	        let sorted_skills = {};
+	        for (const skill of this.skills) {
+	            if (!sorted_skills[skill.type]) sorted_skills[skill.type] = [];
+	            let copied_skill = {...skill}; // Deep copy
+	            delete copied_skill.type;
+	            sorted_skills[skill.type].push(copied_skill);
+	        }
+	        return sorted_skills;
 	    }
-	}
+	},
+	methods: {
+		async searchSkills() {
+			const response = await fetch(`/back/comp_list`);
+			this.info = await response.json();
+			for (let i = 0; i < this.info.length; i++) {
+				const info_skill = this.info[i];
+				const code = info_skill.code;
+				let type;
+				code.includes("G") == true ? type = "Compétences générales" : type = "Compétences techniques";
+				const new_skill = {
+				    id: info_skill.id,
+				    code: code,
+				    type: type
+				};
+				const skill_index = this.skills.findIndex(c => c.code == info_skill.code);
+				if (skill_index > -1) Vue.set(this.skills, skill_index, new_skill);
+				else this.skills.push(new_skill);			
+			}
+		},
+		updateSkill() {
+			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
+			//this.info = await response.json();
+			this.name = 'Hackathon';
+			this.description = 'On va vous en mettre plein la vue !';
+			this.teacher = 'Hervé GRALL';
+		}
+	},
+	mounted: function() {
+		this.searchSkills();
+	},
 })
 
-Vue.component('skill-details-table', {
-	props: ["code"],
+Vue.component('skill-details', {
+	props: ["id"],
 	template: `
-	<table id="skill-details-table" class="info-table">
+	<div class="div-margin">
+		<h1>{{ code }} - {{ name }}</h1>
+		<table id="skills-table">
+			<tbody>
+				<td>
+					<h3>Description :</h3>
+						<ul v-for="point in description">
+							<li>{{ point }}</li>
+						</ul>
+				</td>
+				<td><skill-levels-chart :code="picked" :data="data" style="height: 200px;"/></td>
+			</tbody>
+		</table>
+		<table id="skill-details-table" class="info-table">
 		<thead>
 			<th>UE</th>
 			<th>Période</th>
@@ -107,46 +93,47 @@ Vue.component('skill-details-table', {
 			<th>Jetons</th>
 			<th>Evaluation</th>
 		</thead>
-		<tbody v-for="row in details">
+		<tbody v-for="row in courses_details">
 			<tr>
-				<td>{{ row.ue }}</td>
-				<td>{{ row.period }}</td>
-				<td>{{ row.level }}</td>
-				<td>{{ row.tokens }}</td>
-				<td>{{ row.eval }}</td>
+				<td>{{ row.code_ue }}</td>
+				<td>{{ row.periode }}</td>
+				<td>{{ row.niveau }}</td>
+				<td>{{ row.jetons_valides }}</td>
+				<td>{{ row.note }}</td>
 			</tr>
 		</tbody>
 	</table>
+	</div>
 	`,
-	methods: {
-		searchDetails() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			this.details = [
-				{
-					ue : 'APSA',
-					period : 'A1S1',
-					level : '3',
-					tokens: '3',
-					eval: '='
-				},
-				{
-					ue : 'LV1',
-					period : 'A1S1',
-					level : '3',
-					tokens: '3',
-					eval: '+'
-				},
-				{
-					ue : 'MPO',
-					period : 'A1S2',
-					level : '2',
-					tokens: '3',
-					eval: '='
-				}
-			]			
-		}	
+	data: function() {
+		return {
+			name: "",
+			code: "",
+			description: [],
+			courses_details: []
+		}
 	},
-	created: function() {
+	methods: {
+		async searchDetails() {
+			const response = await fetch(`/back/comp/${this.id}`);
+			this.info = await response.json();
+			this.code = this.info.code;
+			this.name = this.info.nom;
+			this.description = this.info.description.split("* ").slice(1);
+
+			for (let i = 0; i < this.info.ue_details.length; i++) {
+			    let course = this.info.ue_details[i];
+				Vue.set(this.courses_details, i, course);
+			}
+			console.log(this.courses_details);
+		}
+	},
+	mounted: function() {
 		this.searchDetails();
+	},
+	watch: {
+		id() {
+			this.searchDetails();
+		}
 	}
 })
