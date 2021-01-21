@@ -10,4 +10,6 @@ urlpatterns = [
     path('jetons', views.get_jetons, name='back_jetons'),
     path('ects', views.get_ects, name='back_ects'),
     path('obligations', views.get_obligations, name='back_obligations'),
+    path('ue_list', views.all_ue, name='back_all_ue'),
+    path('comp_list', views.all_competence, name='back_all_competence'),
 ]
