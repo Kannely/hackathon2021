@@ -11,10 +11,10 @@ Vue.component('obligations-table', {
 				<tr class="obligations-category">
 					<td colspan="3">{{obligation.name}}</td>
 				</tr>
-				<tr v-for="skill in obligation.skills">
-					<td>{{skill.name}}</td>
-					<td>{{skill.currently}}</td>
-					<td>{{skill.goal}}</td>
+				<tr v-for="(value,id) in obligation.skills">
+					<td>{{value[0]}}</td>
+					<td>{{value[1]}}</td>
+					<td>{{value[2]}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -22,53 +22,55 @@ Vue.component('obligations-table', {
 	`,
 	data: function() {
 		return {
-			
+			obligations: [
+				{
+					name: 'Général',
+					skills: {
+						ects: ["ECTS"],
+						c2io: ["C2IO"],
+						comp_nv3: ["Compétences de niveau 3"]
+					}
+				},
+				{
+					name: 'Expériences',
+					skills: {
+						stage: ["Professionnelles"],
+						etranger: ["A l'étranger"]
+					}
+				},
+				{
+					name: 'Langues',
+					skills: {
+						ielts: ["IELTS"],
+						lv1: ["LV1"],
+						lv2: ["LV2"]
+					}
+				},
+			]
 		}
 	},
 	methods: {
-		searchObligations() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			this.obligations = [
-				{
-					name : 'Langues',
-					skills : [
-					{
-						name : 'LV1',
-						currently : 'B2',
-						goal : 'C1'
-					},
-					{
-						name : 'LV2',
-						currently : 'B2',
-						goal : 'B2'
-					},
-					{
-						name : 'IELTS',
-						currently : 'N/A',
-						goal : '7.5/9'
-					}
-					]
-				},
-				{
-					name : 'Expériences',
-					skills : [
-					{
-						name : 'Professionnelle',
-						currently : '10 mois',
-						goal : '18 mois'
-					},
-					{
-						name : 'A l\'étranger',
-						currently : '5 mois',
-						goal : '9 mois'
-					}
-					]
+		async searchObligations() {
+			const response = await fetch(`/back/obligations`);
+			this.info = await response.json();
+			for (var i = 0; i < this.obligations.length; i++) {
+				var skills = Object.keys(this.obligations[i].skills);
+				for (var j = 0; j < skills.length; j++) {
+					var skill = skills[j];
+					this.obligations[i].skills[skill][1] = this.info["etudiant"][skill];
+					this.obligations[i].skills[skill][2] = this.info["formation"][skill];
+
 				}
-			]
-			
+			}
+		console.log(this.obligations);
 		}	
 	},
-	created: function() {
+	mounted: function() {
 		this.searchObligations();
+	},
+	watch: {
+	    obligations() {
+	        console.log('hello');
+	    }
 	}
 })
