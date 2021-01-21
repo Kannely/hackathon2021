@@ -14,4 +14,5 @@ urlpatterns = [
     path('ue/<int:pk>', views.get_ue_details, name='back_ue_details'),
     path('comp_list', views.all_competence, name='back_all_competence'),
     path('comp/<int:pk>', views.get_comp_details, name='back_comp_details'),
+    path('comp_eval/<int:pk>', views.get_eval_comp, name='back_eval_comp'),
 ]
