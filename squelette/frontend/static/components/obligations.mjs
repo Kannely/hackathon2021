@@ -11,10 +11,10 @@ Vue.component('obligations-table', {
 				<tr class="obligations-category">
 					<td colspan="3">{{obligation.name}}</td>
 				</tr>
-				<tr v-for="(value,id) in obligation.skills">
-					<td>{{value[0]}}</td>
-					<td>{{value[1]}}</td>
-					<td>{{value[2]}}</td>
+				<tr v-for="skill in obligation.skills">
+					<td>{{skill.name}}</td>
+					<td>{{skill.current}}</td>
+					<td>{{skill.objective}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -25,26 +25,26 @@ Vue.component('obligations-table', {
 			obligations: [
 				{
 					name: 'Général',
-					skills: {
-						ects: ["ECTS"],
-						c2io: ["C2IO"],
-						comp_nv3: ["Compétences de niveau 3"]
-					}
+					skills: [
+					    { name: "ECTS", code: "ects" },
+						{ name: "C2IO", code: "c2io" },
+						{ name: "Compétences de niveau 3", code: "comp_nv3" }
+					]
 				},
 				{
 					name: 'Expériences',
-					skills: {
-						stage: ["Professionnelles"],
-						etranger: ["A l'étranger"]
-					}
+					skills: [
+						{ name: "Professionnelles", code: "stage" },
+						{ name: "A l'étranger", code: "etranger" }
+					]
 				},
 				{
 					name: 'Langues',
-					skills: {
-						ielts: ["IELTS"],
-						lv1: ["LV1"],
-						lv2: ["LV2"]
-					}
+					skills: [
+						{ name: "IELTS", code: "ielts" },
+						{ name: "LV1", code: "lv1" },
+						{ name: "LV2", code: "lv2" }
+					]
 				},
 			]
 		}
@@ -53,24 +53,21 @@ Vue.component('obligations-table', {
 		async searchObligations() {
 			const response = await fetch(`/back/obligations`);
 			this.info = await response.json();
-			for (var i = 0; i < this.obligations.length; i++) {
-				var skills = Object.keys(this.obligations[i].skills);
-				for (var j = 0; j < skills.length; j++) {
-					var skill = skills[j];
-					this.obligations[i].skills[skill][1] = this.info["etudiant"][skill];
-					this.obligations[i].skills[skill][2] = this.info["formation"][skill];
-
+			for (let i = 0; i < this.obligations.length; i++) {
+			    let obligation = this.obligations[i];
+				for (let j = 0; j < obligation.skills.length; j++) {
+					const skill = obligation.skills[j];
+					obligation.skills[j] = {
+					    ...skill,
+					    current: this.info["etudiant"][skill.code],
+					    objective: this.info["formation"][skill.code]
+					};
 				}
+				Vue.set(this.obligations, i, obligation);
 			}
-		console.log(this.obligations);
 		}	
 	},
 	mounted: function() {
 		this.searchObligations();
 	},
-	watch: {
-	    obligations() {
-	        console.log('hello');
-	    }
-	}
 })
