@@ -1,13 +1,12 @@
-import json
-
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+
+import json
 
 import urllib.request
 from urllib.error import HTTPError
 from .models import *
 from django.forms.models import model_to_dict
-
-PASS_PREFIX = "/pass/"
 
 lv_dict = {
     'A1': 1,
@@ -18,14 +17,13 @@ lv_dict = {
     'C2': 6
 }
 
-
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
 
 
 def __get_pass_url__(request, suffix):
-    return request.build_absolute_uri(PASS_PREFIX + suffix)
+    return request.build_absolute_uri(settings.PASS_PREFIX + suffix)
 
 
 def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
@@ -34,8 +32,8 @@ def __make_json_request__(request, url, transfer_cookie=True, fields_only=False)
     if transfer_cookie and cookie:
         new_request.add_header("Cookie", cookie)
     try:
-        url = urllib.request.urlopen(new_request)
-        data = json.loads(url.read().decode())
+        response = urllib.request.urlopen(new_request)
+        data = json.loads(response.read().decode())
         if fields_only:
             data = data[0]['fields']
         return data, 200
@@ -259,11 +257,59 @@ def all_ue(request):
         for ue in ues_data:
             pk = ue['pk']
             fields = ue['fields']
-            infos = {'id':pk, 'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
+            infos = {'id': pk, 'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
                      'en_cours': pk in en_cours_list}
             result.append(infos)
         return JsonResponse(result, status=200, safe=False)
 
 
+def get_ue_details(request, pk):
+    ue_suivi = __get_suivre_ue__(request)
+    suivi = False
+    eval = {}
+    for ue in ue_suivi:
+        if ue['ue'] == pk:
+            suivi = True
+            eval = ue
+    url = __get_pass_url__(request, 'ue/' + str(pk))
+    ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+    if ue_code == 200:
+        ue_data['suivi'] = suivi
+        if suivi:
+            periode_url = __get_pass_url__(request, 'periode/' + str(eval['periode']))
+            periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+            eval['periode'] = periode_data['code']
+            del eval['ue']
+            ue_data = {**ue_data, **eval}
+        return JsonResponse(ue_data, status=200, safe=False)
+
+
+def get_eval_comp(request, pk):
+    eval_competence_url = __get_pass_url__(request, 'eval_competence/' + str(pk))
+    eval_comp_data, eval_comp_code = __make_json_request__(request, eval_competence_url, fields_only=True)
+    if eval_comp_code == 200:
+        url = __get_pass_url__(request, 'competence/' + str(eval_comp_data['competence']))
+        comp_data, comp_code = __make_json_request__(request, url, fields_only=True)
+        eval_comp_data['competence'] = comp_data['code']
+    return JsonResponse(eval_comp_data, status=200, safe=False)
+
+
 def all_competence(request):
-    pass
+    url = __get_pass_url__(request, 'all_competence')
+    comps_data, comps_code = __make_json_request__(request, url, fields_only=False)
+    result = []
+    if comps_code == 200:
+        for c in comps_data:
+            pk = c['pk']
+            fields = c['fields']
+            infos = {'id': pk, 'code': fields['code']}
+            result.append(infos)
+        return JsonResponse(result, status=200, safe=False)
+
+
+def get_comp_details(request, pk):
+    url = __get_pass_url__(request, 'competence/' + str(pk))
+    comp_data, comp_code = __make_json_request__(request, url, fields_only=True)
+    if comp_code == 200:
+        pass
+    return JsonResponse(comp_data, status=comp_code, safe=False)

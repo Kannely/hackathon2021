@@ -77,7 +77,7 @@ Vue.component('courses', {
 			this.teacher = 'Hervé GRALL';
 		}
 	},
-	created: function() {
+	mounted: function() {
 		this.searchCourses();
 	},
 	watch: {
@@ -106,7 +106,7 @@ Vue.component('course-levels-chart', {
 			this.createChart();
 		}
 	},
-	mounted () {
+	mounted: function () {
 		this.createChart();
 	},
 	watch: {
@@ -184,7 +184,7 @@ Vue.component('course-table', {
 			}		
 		}	
 	},
-	created: function() {
+	mounted: function() {
 		this.searchDetails();
 	}
 })
