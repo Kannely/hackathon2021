@@ -17,6 +17,7 @@ lv_dict = {
     'C2': 6
 }
 
+
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
@@ -89,7 +90,7 @@ def __get_suivre_ue__(request, periode=None):
     return all_suivre_ues
 
 
-def get_eval_competences(request, periode=None):
+def __get_eval_competences__(request, periode=None):
     ues = __get_suivre_ue__(request, periode)
     competences = []
     for ue in ues:
@@ -106,7 +107,7 @@ def get_eval_competences(request, periode=None):
 
 
 def __get_bilan_competence__(request, periode=None):
-    evals = get_eval_competences(request, periode)
+    evals = __get_eval_competences__(request, periode)
     default = {'win': 0, 'loose': 0}
     bilan = {}
     for e in evals:
@@ -308,8 +309,40 @@ def all_competence(request):
 
 
 def get_comp_details(request, pk):
+    ues_suivies = __get_suivre_ue__(request)
+    student_eval_comp_list = set()
+    for ue in ues_suivies:
+        student_eval_comp_list = student_eval_comp_list.union(set(ue['competences']))
+    url = __get_pass_url__(request, 'eval_comp_for_comp/' + str(pk))
+    all_evals_data, all_evals_code = __make_json_request__(request, url, fields_only=False)
+    comp_eval_comp_list = set()
+    for e in all_evals_data:
+        comp_eval_comp_list.add(e['pk'])
+    eval_comp = student_eval_comp_list & comp_eval_comp_list
+
+    all_ue = __get_suivre_ue__(request)
+    ue_for_this_comp = []
+    for ue in all_ue:
+        if (set(ue['competences']) & eval_comp) != set():
+            ue_for_this_comp.append((eval_comp, ue['ue'], ue['periode']))
+    ues_details = []
+    for eval_comp, ue_id, p in ue_for_this_comp:
+        eval_comp_id = eval_comp.pop()
+        url = __get_pass_url__(request, 'eval_competence/' + str(eval_comp_id))
+        eval_comp_data, eval_comp_code = __make_json_request__(request, url, fields_only=True)
+        url = __get_pass_url__(request, 'periode/' + str(p))
+        periode_data, _ = __make_json_request__(request, url, fields_only=True)
+        url = __get_pass_url__(request, 'ue/' + str(ue_id))
+        ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+        del eval_comp_data['competence']
+        del eval_comp_data['jetons_tentes']
+        eval_comp_data['code_ue'] = ue_data['code']
+        eval_comp_data['periode'] = periode_data['code']
+        ues_details.append(eval_comp_data)
+
     url = __get_pass_url__(request, 'competence/' + str(pk))
     comp_data, comp_code = __make_json_request__(request, url, fields_only=True)
-    if comp_code == 200:
-        pass
+    for seuil in range(1, 6):
+        del comp_data['seuil' + str(seuil)]
+    comp_data['ue_details'] = ues_details
     return JsonResponse(comp_data, status=comp_code, safe=False)
