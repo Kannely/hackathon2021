@@ -3,73 +3,92 @@ Vue.component('courses', {
 	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
-				<ul v-for="slot in courses">
-					<li><h3>Créneau {{ slot[0] }}</h3></li>
-					<ul v-for="course in slot[1]">
+				<ul v-for="(slot_courses, slot) in sorted_courses">
+					<li><h3>Créneau {{ slot }}</h3></li>
+					<ul v-for="course in slot_courses">
 						<li>
-							<input type="radio" :id="course[0]" :value="course[0]" v-model="picked" class="navbar-selection" v-on:change="changeCourse()">
-							<label :for="course[0]" class="navbar-selection">{{ course[0] }}</label>
+							<input type="radio" :id="course.code" :value="course.code" v-model="selected_course" class="navbar-selection" @change="updateCourse()">
+							<label :for="course.code" class="navbar-selection">{{ course.code }}</label>
 						</li>
 					</ul>
 				</ul>
 			</div>
 		</nav>
 		<div style="margin-left: 200px;">
-			<h1>{{ picked }} - {{ name }}</h1>
+			<h1>{{ selected_course }} - {{ selected_course_data.name }}</h1>
 			<h3>Description :</h3>
-			<p>{{ description }}</p>
-			<h3>Responsable : <span class="normal">{{ teacher }}</span></h3>
-			<course-table :code="picked" />
+			<p>{{ selected_course_data.description }}</p>
+			<h3>Responsable : <span class="normal">{{ selected_course_data.teacher }}</span></h3>
+			<course-table :code="selected_course" />
 		</div>
 	</div>
 	`,
 	data: function() {
 		return {
-			picked: "APSA",
-			name: 'Activité Physique, Sportive et Artistique',
-			description: 'Plein de sports sympas pour digérer la galette',
-			teacher: 'Nathalie MARSCHAL',
-			period: 'A1S1',
-			grade: 'B',
-			tokens: '5/6',
-			ects: '1/1',
-			skills: [
-				{
-					'name': 'CG1',
-					'level': 2,
-					'tokens': '1/2',
-					'eval': '='
-				},
-				{
-					'name': 'CG1',
-					'level': 3,
-					'tokens': '2/2',
-					'eval': '+'
-				}
+			courses: [
+				/*{ 
+				    code: '1',
+				    slot: 'A',
+				    in_progress: false,
+				    done: false,
+			    },*/
 			],
-			courses: new Map([
-				['A', [[2,false,false], [4,true,true]]],
-				['B', [[1,false,false], [1,true,false]]]
-			])
+			selected_course: "APSA",
+			selected_course_data: {
+    			name: 'Activité Physique, Sportive et Artistique',
+			    description: 'Plein de sports sympas pour digérer la galette',
+			    teacher: 'Nathalie MARSCHAL',
+			    period: 'A1S1',
+			    grade: 'B',
+			    tokens: '5/6',
+			    ects: '1/1',
+			    skills: [
+				    {
+					    name: 'CG1',
+					    level: 2,
+					    tokens: '1/2',
+					    eval: '='
+				    },
+				    {
+					    name: 'CG1',
+					    level: 3,
+					    tokens: '2/2',
+					    eval: '+'
+				    }
+			    ],
+			}
 		}
+	},
+	computed: {
+	    sorted_courses() {
+	        let sorted_courses = {};
+	        for (const course of this.courses) {
+	            if (!sorted_courses[course.slot]) sorted_courses[course.slot] = [];
+	            let copied_course = {...course}; // Deep copy
+	            delete copied_course.slot;
+	            sorted_courses[course.slot].push(copied_course);
+	        }
+	        return sorted_courses;
+	    }
 	},
 	methods: {
 		async searchCourses() {
 			const response = await fetch(`/back/ue_list`);
 			this.info = await response.json();
-			for (var i = 0; i < this.info.length; i++) {
-				var slot = this.info[i].creneau;
-				var courses_slot = [];
-				if (this.courses.has(slot)) {
-					courses_slot = this.courses.get(slot);
-					courses_slot.push([this.info[i].code, this.info[i].termine, this.info[i].en_cours]);
-					this.courses.set(slot, courses_slot);
-				} else {
-					this.courses.set(slot, [[this.info[i].code, this.info[i].termine, this.info[i].en_cours]]);
-				}				
+			for (let i = 0; i < this.info.length; i++) {
+				const info_course = this.info[i];
+				const new_course = {
+				    code: info_course.code,
+				    slot: info_course.creneau,
+				    in_progress: info_course.en_cours,
+				    done: info_course.termine
+				};
+				const course_index = this.courses.findIndex(c => c.code == info_course.code);
+				if (course_index > -1) Vue.set(this.courses, course_index, new_course);
+				else this.courses.push(new_course);			
 			}
 		},
-		changeCourse() {
+		updateCourse() {
 			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
 			//this.info = await response.json();
 			this.name = 'Hackathon';
@@ -77,46 +96,9 @@ Vue.component('courses', {
 			this.teacher = 'Hervé GRALL';
 		}
 	},
-	created: function() {
+	mounted: function() {
 		this.searchCourses();
 	},
-	watch: {
-		skills() {
-
-		}
-	}
-})
-
-Vue.component('course-levels-chart', {
-	extends: VueChartJs.Bar,
-	props: ["code", "data"],
-	methods: {
-		createChart() {
-			this.renderChart({
-				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
-				datasets: [{
-					label: this.code,
-					backgroundColor: "blue",
-					data: this.data
-				}]
-			}, {responsive: true, maintainAspectRatio: false})
-		},
-		updateChart() {
-			this._chart.destroy();
-			this.createChart();
-		}
-	},
-	mounted () {
-		this.createChart();
-	},
-	watch: {
-	    code() {
-	        this.updateChart();
-	    },
-	    data() {
-	        this.updateChart();
-	    }
-	}
 })
 
 Vue.component('course-table', {
