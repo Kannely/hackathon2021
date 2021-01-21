@@ -259,11 +259,52 @@ def all_ue(request):
         for ue in ues_data:
             pk = ue['pk']
             fields = ue['fields']
-            infos = {'id':pk, 'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
+            infos = {'id': pk, 'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
                      'en_cours': pk in en_cours_list}
             result.append(infos)
         return JsonResponse(result, status=200, safe=False)
 
 
+def get_ue_details(request, pk):
+    ue_suivi = __get_suivre_ue__(request)
+    suivi = False
+    eval = {}
+    for ue in ue_suivi:
+        if ue['ue'] == pk:
+            suivi = True
+            eval = ue
+    url = __get_pass_url__(request, 'ue/' + str(pk))
+    ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+    if ue_code == 200:
+        ue_data['suivi'] = suivi
+        if suivi:
+            periode_url = __get_pass_url__(request, 'periode/' + str(eval['periode']))
+            periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+            eval['periode'] = periode_data['code']
+            del eval['ue']
+            ue_data = {**ue_data, **eval}
+        return JsonResponse(ue_data, status=200, safe=False)
+
+
 def all_competence(request):
     pass
+
+
+def get_comp_details(request, pk):
+    ue_suivi = __get_suivre_ue__(request)
+    suivi = False
+    eval = {}
+    for ue in ue_suivi:
+        if ue['ue'] == pk:
+            suivi = True
+            eval = ue
+    url = __get_pass_url__(request, 'ue/' + str(pk))
+    ue_data, ue_code = __make_json_request__(request, url, fields_only=True)
+    if ue_code == 200:
+        ue_data['suivi'] = suivi
+        if suivi:
+            periode_url = __get_pass_url__(request, 'periode/' + str(eval['periode']))
+            periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
+            eval['periode'] = periode_data['code']
+            del eval['ue']
+        return JsonResponse(eval, status=200, safe=False)
