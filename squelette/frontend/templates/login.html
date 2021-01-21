@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block script %}
+    <script src="/static/login.js"></script>
+{% endblock %}
+
 {% block content %}
     {% if form.non_field_errors %}
       <div class="alert alert-danger" role="alert">
@@ -9,7 +13,7 @@
       </div>
     {% endif %}
     <div class="div-margin">
-      <form action="" method="post">{% csrf_token %}
+      <form id="login_form" action="" method="post">{% csrf_token %}
           <label>Nom d'utilisateur : <input name="username" type="text" /></label>
           <label>Mot de passe : <input name="password" type="password" /></label>
           <input type="submit" value="Connexion" />
