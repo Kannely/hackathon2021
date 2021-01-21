@@ -76,3 +76,13 @@ def get_formation(request, id):
 def get_obligation(request, id):
     obj = Obligations.objects.filter(pk=id).first()
     return __get_json_or_404__(obj, array=False)
+
+
+def get_all_ue(request):
+    objs = UE.objects.all()
+    return __get_json_or_404__(objs)
+
+
+def get_all_competence(request):
+    objs = Competence.objects.all()
+    return __get_json_or_404__(objs)

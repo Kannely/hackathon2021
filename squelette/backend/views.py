@@ -72,7 +72,7 @@ def get_synthesis(request):
     return JsonResponse(etudiant_data, status=etudiant_code)
 
 
-def get_suivre_ue(request, periode=None):
+def __get_suivre_ue__(request, periode=None):
     url = __get_pass_url__(request, 'etudiant')
     etudiant_data, etudiant_code = __make_json_request__(request, url, fields_only=True)
     all_suivre_ues = []
@@ -92,7 +92,7 @@ def get_suivre_ue(request, periode=None):
 
 
 def get_eval_competences(request, periode=None):
-    ues = get_suivre_ue(request, periode)
+    ues = __get_suivre_ue__(request, periode)
     competences = []
     for ue in ues:
         competences += ue['competences']
@@ -107,7 +107,7 @@ def get_eval_competences(request, periode=None):
     return all_eval_comp
 
 
-def get_bilan_competence(request, periode=None):
+def __get_bilan_competence__(request, periode=None):
     evals = get_eval_competences(request, periode)
     default = {'win': 0, 'loose': 0}
     bilan = {}
@@ -124,9 +124,9 @@ def get_bilan_competence(request, periode=None):
     return bilan
 
 
-def get_niveau_competences(request):
-    bilan = get_bilan_competence(request)
-    niveaux = {}
+def __get_niveau_competences__(request):
+    bilan = __get_bilan_competence__(request)
+    lvls = {}
     for c in bilan.keys():
         comp_url = __get_pass_url__(request, 'competence/' + str(c))
         comp_data, comp_code = __make_json_request__(request, comp_url, fields_only=True)
@@ -135,12 +135,12 @@ def get_niveau_competences(request):
             for seuil in range(1, 6):
                 if bilan[c][seuil]['win'] >= comp_data['seuil' + str(seuil)]:
                     niveau = seuil
-            niveaux[comp_data['code']] = niveau
-    return niveaux
+            lvls[comp_data['code']] = niveau
+    return lvls
 
 
 def get_comp_gen(request):
-    niveau_dict = get_niveau_competences(request)
+    niveau_dict = __get_niveau_competences__(request)
     gen_dict = niveau_dict.copy()
     for key in niveau_dict.keys():
         if key[:2] != 'CG':
@@ -149,7 +149,7 @@ def get_comp_gen(request):
 
 
 def get_ue_per_year(request):
-    ues = get_suivre_ue(request)
+    ues = __get_suivre_ue__(request)
     ue_per_year = {'A1': {'valide': 0, 'tente': 0}, 'A2': {'valide': 0, 'tente': 0}, 'A3': {'valide': 0, 'tente': 0}}
     for ue in ues:
         periode_url = __get_pass_url__(request, 'periode/' + str(ue['periode']))
@@ -162,7 +162,7 @@ def get_ue_per_year(request):
 
 
 def get_jetons(request):
-    bilan = get_bilan_competence(request)
+    bilan = __get_bilan_competence__(request)
     result = {'current_year': 0, 'total': 0}
     for k in bilan.keys():
         for l in bilan[k].keys():
@@ -174,7 +174,7 @@ def get_jetons(request):
         periode_url = __get_pass_url__(request, 'periode/' + str(etudiant_data['periode_actuelle']))
         periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
         if periode_code == 200:
-            year = get_bilan_competence(request, periode=periode_data['code'][:2])
+            year = __get_bilan_competence__(request, periode=periode_data['code'][:2])
             for k in year.keys():
                 for l in year[k].keys():
                     result['current_year'] += year[k][l]['win']
@@ -182,7 +182,7 @@ def get_jetons(request):
 
 
 def get_ects(request):
-    ues = get_suivre_ue(request)
+    ues = __get_suivre_ue__(request)
     result = {'current_year': 0, 'total': 0}
     for ue in ues:
         result['total'] += ue['ects_obtenus']
@@ -192,7 +192,7 @@ def get_ects(request):
         periode_url = __get_pass_url__(request, 'periode/' + str(etudiant_data['periode_actuelle']))
         periode_data, periode_code = __make_json_request__(request, periode_url, fields_only=True)
         if periode_code == 200:
-            year = get_suivre_ue(request, periode=periode_data['code'][:2])
+            year = __get_suivre_ue__(request, periode=periode_data['code'][:2])
             for ue in year:
                 result['current_year'] += ue['ects_obtenus']
     return JsonResponse(result, status=200)
@@ -205,9 +205,9 @@ def get_obligations(request):
         url = __get_pass_url__(request, 'obligation/' + str(etudiant_data['obligations']))
         obl_data, obl_code = __make_json_request__(request, url, fields_only=True)
         obl_data['ects'] = 0
-        ues = get_suivre_ue(request)
+        ues = __get_suivre_ue__(request)
         for ue in ues:
-            obl_data['ects'] += ue['ects_obtenus']
+            obl_data['ects'] += ue['ects_obtenus'] if ue['ects_obtenus'] is not None else 0
         obl_data['c2io'] = 0
         for ue in ues:
             url = __get_pass_url__(request, 'ue/' + str(ue['ue']))
@@ -216,7 +216,7 @@ def get_obligations(request):
                 if ue_data["c2io"]:
                     obl_data['c2io'] += ue['ects_obtenus']
         obl_data['comp_nv3'] = 0
-        niveau_dict = get_niveau_competences(request)
+        niveau_dict = __get_niveau_competences__(request)
         for k in niveau_dict.keys():
             if k[:2] == 'CG' and niveau_dict[k] > 0:
                 obl_data['comp_nv3'] += 1
@@ -238,3 +238,32 @@ def get_obligations(request):
             result['percentage'] += min(1.0, result['etudiant']['comp_nv3'] / result['formation']['comp_nv3'])
             result['percentage'] = result['percentage'] / 8
             return JsonResponse(result, status=200, safe=False)
+
+
+def all_ue(request):
+    url = __get_pass_url__(request, 'etudiant')
+    etudiant_data, _ = __make_json_request__(request, url, fields_only=True)
+    p = etudiant_data['periode_actuelle']
+    ue_suivi = __get_suivre_ue__(request)
+    termine_list = set()
+    en_cours_list = set()
+    for ue in ue_suivi:
+        if ue['periode'] == p:
+            en_cours_list.add(ue['ue'])
+        else:
+            termine_list.add(ue['ue'])
+    url = __get_pass_url__(request, 'all_ue')
+    ues_data, ues_code = __make_json_request__(request, url, fields_only=False)
+    result = []
+    if ues_code == 200:
+        for ue in ues_data:
+            pk = ue['pk']
+            fields = ue['fields']
+            infos = {'code': fields['code'], 'creneau': fields['creneau'], 'termine': pk in termine_list,
+                     'en_cours': pk in en_cours_list}
+            result.append(infos)
+        return JsonResponse(result, status=200, safe=False)
+
+
+def all_competence(request):
+    pass
