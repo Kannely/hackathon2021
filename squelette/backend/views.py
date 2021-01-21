@@ -116,7 +116,7 @@ def __get_eval_competences__(request, periode=None):
 
 
 def __get_bilan_competence__(request, periode=None):
-    evals = get_eval_competences(request, periode)
+    evals = __get_eval_competences__(request, periode)
     if not evals:
         return None
     default = {'win': 0, 'loose': 0}
