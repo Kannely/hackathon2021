@@ -12,10 +12,11 @@
         {% endfor %}
       </div>
     {% endif %}
-
-    <form id="login_form" action="" method="post">{% csrf_token %}
-        <label>Nom d'utilisateur : <input name="username" type="text" /></label>
-        <label>Mot de passe : <input name="password" type="password" /></label>
-        <input type="submit" value="Connexion" />
-    </form>
+    <div class="div-margin">
+      <form action="" method="post">{% csrf_token %}
+          <label>Nom d'utilisateur : <input name="username" type="text" /></label>
+          <label>Mot de passe : <input name="password" type="password" /></label>
+          <input type="submit" value="Connexion" />
+      </form>
+    </div>
 {% endblock %}

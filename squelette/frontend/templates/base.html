@@ -21,10 +21,22 @@
 			    {% if menuitem.logged and is_authenticated or not menuitem.logged and not is_authenticated %}
 			        <li>
 			            <a href="{% url menuitem.url %}">
-			            {% if menuitem.class %}
-			            <span><i class="{{ menuitem.class }}"></i></span>
+			            	
+			            {% if menuitem.name == 'Connexion' or menuitem.name == 'Déconnexion' %}
+			            	<div class="connexion-link">
+			            		<hr>
+			            		{% if menuitem.class %}
+					            <span><i class="{{ menuitem.class }}"></i></span>
+					            {% endif %}
+			            		{{ menuitem.name }}
+			            	</div>
+			            {% else %}
+			            	{% if menuitem.class %}
+				            <span><i class="{{ menuitem.class }}"></i></span>
+				            {% endif %}
+			            	{{ menuitem.name }}
 			            {% endif %}
-			            {{ menuitem.name }}
+
 			            </a>
 			        </li>
 			    {% endif %}

@@ -1,7 +1,7 @@
 Vue.component('obligations-table', {
 	template: `
-	<div>
-		<table id="obligations-table">
+	<div class="div-margin">
+		<table id="obligations-table" class="info-table">
 			<thead>
 				<th>Condition</th>
 				<th>Etat actuel</th>

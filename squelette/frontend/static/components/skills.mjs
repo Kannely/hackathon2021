@@ -1,13 +1,15 @@
-Vue.component('skills-menu', {
+Vue.component('skills', {
 	template: `
-	<div>
+	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
 				<ul v-for="category in skills">
-					<li>{{ category.name }}</li>
+					<li><h3>{{ category.name }}</h3></li>
 					<ul v-for="skill in category.skills">
-						<input type="radio" :id="skill" :value="skill" v-model="picked" class="skill-selection" v-on:change="changeSkill()">
-						<label :for="skill" class="skill-selection">{{ skill }}</label>
+						<li>
+							<input type="radio" :id="skill" :value="skill" v-model="picked" class="navbar-selection" v-on:change="changeSkill()">
+							<label :for="skill" class="navbar-selection">{{ skill }}</label>
+						</li>
 					</ul>
 				</ul>
 			</div>
@@ -20,10 +22,10 @@ Vue.component('skills-menu', {
 						<h3>Description :</h3>
 						<p>{{ description }}</p>
 					</td>
-					<td><skill-levels-chart style="height: 200px;"/></td>
+					<td><skill-levels-chart :code="picked" :data="data" style="height: 200px;"/></td>
 				</tbody>
 			</table>
-			<skill-details-table />
+			<skill-details-table :code="picked" />
 		</div>
 	</div>
 	`,
@@ -31,7 +33,8 @@ Vue.component('skills-menu', {
 		return {
 			picked: "CSG1",
 			name: "S'engager",
-			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+			description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+			data: [1,2,1,2,1]
 		}
 	},
 	methods: {
@@ -52,7 +55,7 @@ Vue.component('skills-menu', {
 			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
 			this.name = 'Coordonner une équipe';
 			this.description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-			console.log(this.picked);
+			this.data = [2,1,2,3,5];
 		}
 	},
 	created: function() {
@@ -62,23 +65,41 @@ Vue.component('skills-menu', {
 
 Vue.component('skill-levels-chart', {
 	extends: VueChartJs.Bar,
-	props: ["name"],
+	props: ["code", "data"],
+	methods: {
+		createChart() {
+			this.renderChart({
+				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
+				datasets: [{
+					label: this.code,
+					backgroundColor: "#d2de81",
+					data: this.data
+				}]
+			}, {responsive: true, maintainAspectRatio: false})
+		},
+		updateChart() {
+			this._chart.destroy();
+			this.createChart();
+		}
+	},
 	mounted () {
-		console.log(this.name);
-		this.renderChart({
-			labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
-			datasets: [{
-				label: this.code,
-				backgroundColor: "blue",
-				data: [2,1,2,3,5]
-			}]
-		}, {responsive: true, maintainAspectRatio: false})
+		this.createChart();
+	},
+	watch: {
+	    code() {
+	        this.updateChart();
+	    },
+	    data() {
+	        this.updateChart();
+	        console.log(this.data);
+	    }
 	}
 })
 
 Vue.component('skill-details-table', {
+	props: ["code"],
 	template: `
-	<table id="skill-details-table">
+	<table id="skill-details-table" class="info-table">
 		<thead>
 			<th>UE</th>
 			<th>Période</th>
