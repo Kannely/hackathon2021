@@ -58,7 +58,7 @@ Vue.component('skills', {
 			this.data = [2,1,2,3,5];
 		}
 	},
-	mounted: function() {
+	created: function() {
 		this.searchSkills();
 	}
 })
@@ -146,7 +146,7 @@ Vue.component('skill-details-table', {
 			]			
 		}	
 	},
-	mountedd: function() {
+	created: function() {
 		this.searchDetails();
 	}
 })
