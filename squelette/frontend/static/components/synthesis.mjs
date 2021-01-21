@@ -97,7 +97,7 @@ Vue.component('synthesis', {
 			this.courses_a3.total = this.info["A3"]["tente"];
 		}
 	},
-	created: function() {
+	mounted: function() {
 		this.searchSynthesis();
 		this.searchTokens();
 		this.searchECTS();
@@ -121,6 +121,7 @@ Vue.component('synthesis-skills-chart', {
 					this.skills[i-1] = this.info["CG"+i];
 			}
 			console.log(this.skills);
+	        this.updateChart(); // We do not watch because not only it would recreate the chart 14 times, but it would also require using Vue.set above
 		},
 		createChart() {
 			this.renderChart({
@@ -128,12 +129,29 @@ Vue.component('synthesis-skills-chart', {
 				datasets: [{
 					label: 'Niveaux des compétences',
 					backgroundColor: "#679436",
+					borderColor: "#678436",
 					data: this.skills
 				}]
-			}, {responsive: true, maintainAspectRatio: false})
+			},
+			{
+			    responsive: true,
+			    maintainAspectRatio: false,
+				scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        max: 5,
+                        min: 0,
+                        stepSize: 1
+				    }
+			    }
+		    })
+		},
+		updateChart() {
+			this._chart.destroy();
+			this.createChart();
 		}
 	},
-	mounted () {
+	mounted: function () {
 		this.searchSkills();
 		this.createChart();
 	}
@@ -151,10 +169,8 @@ Vue.component('synthesis-obligations-chart', {
 			const response = await fetch(`/back/obligations`);
 			this.info = await response.json();
 			this.percentage = Math.round(100*this.info["percentage"]);
-			console.log(this.percentage)
 		},
 		createChart() {
-			console.log(this.percentage);
 			this.renderChart({
 				labels: ["Validé", "Non-validé"],
 				datasets: [{
@@ -163,10 +179,19 @@ Vue.component('synthesis-obligations-chart', {
 					data: [this.percentage,100-this.percentage]
 				}]
 			}, {responsive: true, maintainAspectRatio: false})
+		},
+		updateChart() {
+			this._chart.destroy();
+			this.createChart();
 		}
 	},
-	mounted () {
+	mounted: function () {
 		this.searchObligations();
 		this.createChart();
+	},
+	watch: {
+	    percentage() {
+	        this.updateChart();
+	    }
 	}
 })

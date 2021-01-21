@@ -68,7 +68,7 @@ Vue.component('obligations-table', {
 			
 		}	
 	},
-	created: function() {
+	mounted: function() {
 		this.searchObligations();
 	}
 })
