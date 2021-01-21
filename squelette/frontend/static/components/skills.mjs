@@ -55,13 +55,6 @@ Vue.component('skills', {
 				if (skill_index > -1) Vue.set(this.skills, skill_index, new_skill);
 				else this.skills.push(new_skill);			
 			}
-		},
-		updateSkill() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			//this.info = await response.json();
-			this.name = 'Hackathon';
-			this.description = 'On va vous en mettre plein la vue !';
-			this.teacher = 'Hervé GRALL';
 		}
 	},
 	mounted: function() {
@@ -72,17 +65,17 @@ Vue.component('skills', {
 Vue.component('skill-details', {
 	props: ["id"],
 	template: `
-	<div class="div-margin">
+	<div>
 		<h1>{{ code }} - {{ name }}</h1>
+		<h3>Description :</h3>
 		<table id="skills-table">
 			<tbody>
 				<td>
-					<h3>Description :</h3>
-						<ul v-for="point in description">
-							<li>{{ point }}</li>
-						</ul>
+					<ul id="skill-description" v-for="point in description">
+						<li>{{ point }}</li>
+					</ul>
 				</td>
-				<td><skill-levels-chart :code="picked" :data="data" style="height: 200px;"/></td>
+				<td><skill-levels-chart :data="seuils" :code="code" id="skills-chart"/></td>
 			</tbody>
 		</table>
 		<table id="skill-details-table" class="info-table">
@@ -110,7 +103,8 @@ Vue.component('skill-details', {
 			name: "",
 			code: "",
 			description: [],
-			courses_details: []
+			courses_details: [],
+			seuils: Array(5).fill(0)
 		}
 	},
 	methods: {
@@ -123,9 +117,10 @@ Vue.component('skill-details', {
 
 			for (let i = 0; i < this.info.ue_details.length; i++) {
 			    let course = this.info.ue_details[i];
+			    this.seuils[course.niveau-1]++;
 				Vue.set(this.courses_details, i, course);
 			}
-			console.log(this.courses_details);
+
 		}
 	},
 	mounted: function() {
@@ -135,5 +130,56 @@ Vue.component('skill-details', {
 		id() {
 			this.searchDetails();
 		}
+	}
+})
+
+Vue.component('skill-levels-chart', {
+	extends: VueChartJs.Bar,
+	props: ["code", "data"],
+	methods: {
+		createChart() {
+			this.renderChart({
+				labels: ["Niveau 1", "Niveau 2", "Niveau 3", "Niveau 4", "Niveau 5"],
+				datasets: [{
+					label: this.code,
+					backgroundColor: "#d2de81",
+					data: this.data,
+
+				}]
+			}, {
+         		scales: {
+            		xAxes: [{
+		                ticks: {
+		                    autoSkip: false,
+		                    maxRotation: 45,
+		                    minRotation: 45,
+		                }
+            		}],
+            		yAxes: [{
+		                ticks: {
+		                    stepSize: 1
+		                }
+            		}]
+        		 }
+			}, {
+				responsive: true,
+				maintainAspectRatio: false
+			})
+		},
+		updateChart() {
+			this._chart.destroy();
+			this.createChart();
+		}
+	},
+	mounted () {
+		this.createChart();
+	},
+	watch: {
+	    code() {
+	        this.updateChart();
+	    },
+	    data() {
+	        this.updateChart();
+	    }
 	}
 })
