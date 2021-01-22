@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend.apps.BackendConfig',
     'frontend.apps.FrontendConfig',
-    'mockpass.apps.MockpassConfig'
+    'mockpass.apps.MockpassConfig',
+    'mocksso.apps.MockssoConfig'
 ]
 
 MIDDLEWARE = [
