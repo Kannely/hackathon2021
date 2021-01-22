@@ -70,7 +70,7 @@ Vue.component('courses', {
 Vue.component('course-details', {
 	props: ["id"],
 	template: `
-	<div>
+	<div v-show="id">
 		<h1>{{ code }} - {{ name }}</h1>
 		<h3>Description :</h3>
 		<p>{{ description }}</p>
@@ -105,6 +105,7 @@ Vue.component('course-details', {
 	},
 	methods: {
 		async searchDetails() {
+		    if (!this.id) return;
 			const response = await fetch(`/back/ue/${this.id}`);
 			this.info = await response.json();
 			this.code = this.info.code;
