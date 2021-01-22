@@ -107,7 +107,6 @@ Vue.component('course-details', {
 		async searchDetails() {
 			let id = this.id;
 			if (this.id === undefined) id = 3;
-			console.log(id);
 			const response = await fetch(`/back/ue/${id}`);
 			this.info = await response.json();
 			this.code = this.info.code;
