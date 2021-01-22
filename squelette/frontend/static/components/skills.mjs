@@ -1,16 +1,20 @@
 Vue.component('skills', {
 	template: `
-	<div class="secondary-main">
-		<nav class="secondary-nav">
-			<ul v-for="(type_skills, type) in sorted_skills">
-				<h3>{{ type }}</h3>
-				<li v-for="skill in type_skills">
-					<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection">
-					<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
-				</li>
-			</ul>
+	<div class="div-margin">
+		<nav class="nav-two">
+			<div>
+				<ul v-for="(type_skills, type) in sorted_skills">
+					<li><h3>{{ type }}</h3></li>
+					<ul v-for="skill in type_skills">
+						<li>
+							<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection">
+							<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
+						</li>
+					</ul>
+				</ul>
+			</div>
 		</nav>
-		<div class="div-margin">
+		<div style="margin-left: 200px;">
 			<skill-details :id="selected_skill"/>
 		</div>
 	</div>
@@ -118,7 +122,7 @@ Vue.component('skill-details', {
 
 			for (let i = 0; i < this.info.ue_details.length; i++) {
 			    let course = this.info.ue_details[i];
-			    this.seuils[course.niveau-1]++;
+			    this.seuils[course.niveau-1] += course.jetons_valides;
 				Vue.set(this.courses_details, i, course);
 			}
 
