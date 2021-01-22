@@ -1,10 +1,20 @@
+:root {
+    --darkblue: #064789;
+    --lightblue: #c3e4fa;
+    --darkgreen: #679436;
+    --lightgreen: #d2de81;
+    --gray: #f5f7fa;
+    --bordergray: #999999;
+}
+
 body {
     display: grid;
-    grid-template-columns: minmax(10em, 10%) 1fr;
+    grid-template-columns: minmax(12em, 10%) 1fr;
     grid-template-rows: 1fr 2em;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     margin: 0;
+    background-color: var(--gray);
 }
 
 nav {
@@ -12,10 +22,12 @@ nav {
     grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 1em;
-    background-color: #5d6bca;
-    color: white;
+    padding: 0.5em;
+    background-color: var(--darkblue);
+    color: red;
+    height: calc(100% - 1em);
+    width: calc(100% - 1em);
+    overflow-x: hidden;
 }
 
 nav > img {
@@ -27,24 +39,45 @@ nav ul {
     display: flex;
     flex-direction: column;
     list-style: none;
-    margin: 1em;
+    margin: 0;
     padding: 0;
+}
+
+nav li {
+    width: 100%;
+    margin: 0.5em;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    line-height: 2;
+    line-height: 1;
 }
 
-nav a > span {
-    padding-right: 1em;
+nav a.active {
+    font-weight: bold;
+}
+
+nav span {
+    padding-right: 0.2em;
+}
+
+nav .connexion-link {
+    position: absolute;
+    bottom: 0;
+    padding-left: 0.5em;
+    padding-bottom: 1em;
 }
 
 main {
     grid-column: 2;
     grid-row: 1;
-    margin: 2em;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 footer {
@@ -56,23 +89,39 @@ footer {
     background-color: #ccc;
 }
 
-input {
-  margin-right: 2%;
-  padding: 1.5vh;
-  color: #313131;
-  appearance: none;
-  
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 255, 255, 0.5);
-  
-  border: 1px solid rgb(100, 100, 100);
-  border-radius: 16px;
-  transition: 0.4s;
+.normal {
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+.div-margin {
+    padding: 2em 4em;
+    overflow: auto;
+}
+
+/*input {
+    width: 20%x;
+    margin-right: 2%;
+    padding: 1.5vh;
+    color: #313131;
+    appearance: none;
+
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.5);
+
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 16px;
+    transition: 0.4s;
 }
 
 input:focus {
     border-color: black;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.75);
+}*/
+
+.filter-input {
+    width: 80%;
+    margin: 0.2em 1em;
 }
 
 button {
@@ -85,4 +134,167 @@ button {
 
 button:hover {
     background-color: rgb(200, 200, 200);
+}
+
+.center {
+    text-align: center;
+}
+
+.center>table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info-table {
+    width: 100%;
+    border: 1px solid #AEADAC;
+    border-collapse: collapse;
+    line-height: 1em;
+    text-align: center;
+}
+
+.info-table th {
+    background-color: var(--darkgreen);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0 1.5em;
+}
+
+.info-table td {
+    border: 1px solid var(--bordergray);
+    padding: 0;
+}
+
+/* ***** SYNTHESIS ***** */
+
+#synthesis-main {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    overflow-x: auto;
+}
+
+#synthesis-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--lightblue);
+    text-align: center;
+    line-height: 0.5;
+    margin: 0;
+    margin-bottom: 2em;
+    padding: 0;
+}
+
+#synthesis-info img {
+    max-height: 100px;
+}
+
+#synthesis-graph-table {
+    border-collapse: collapse;
+    text-align: center;    
+}
+
+/* ***** OBLIGATIONS ***** */
+
+.obligations-category {
+    background-color: var(--lightgreen);
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#obligations-table {
+    text-align: left;
+}
+
+#obligations-table td, #obligations-table th {
+    padding: 0.8em;
+}
+
+/* ***** SKILLS ***** */
+
+.secondary-main {
+    display: grid;
+    grid-template-columns: minmax(12em, 10%) 1fr;
+    grid-template-rows: 1fr;
+    height: 100%;
+    width: 100%;
+}
+
+.secondary-nav {
+    background-color: var(--lightblue);
+    color: black;
+}
+
+.secondary-nav ul {
+    margin: 0.5em;
+}
+
+input.navbar-selection {
+    display: none;
+}
+
+label.navbar-selection {
+    cursor: pointer;
+}
+
+input[type="radio"]:checked+label{
+    font-weight: bold;
+}
+
+.filter-input input {
+    max-width: 50%;
+} 
+
+#skill-description {
+    margin: 0;
+}
+
+#skills-table {
+    width: 100%;
+    height: 50px;
+}
+
+#skills-table td {
+    width: 50%;
+    padding: 0;
+    text-align: left;
+    vertical-align: top;
+}
+
+#skill-details-table {
+    margin: 2em;
+}
+
+#skill-details-table td, #skill-details-table th {
+    padding: 0.5em;
+}
+
+#skills-chart {
+    height: 300px;
+    width: 300px;
+    margin-left: 5em;
+}
+
+/* ***** COURSES ***** */
+
+#course-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#course-details-table {
+    width: 100%;
+    font-size: 1.2em;
+    font-weight: 500;
+    line-height: 1.3em;
+    margin: 0.8em 0;
+}
+
+
+#course-skills-table td, #course-skills-table th {
+    padding: 0.5em;
 }

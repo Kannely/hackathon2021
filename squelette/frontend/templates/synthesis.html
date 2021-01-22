@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+
 {% load vue_components %}
 
 {% block script %}
-    {{ "cat"|load_component }}
+{% load_vue_chart %}
+{{ "synthesis"|load_component }}
 {% endblock %}
 
 {% block content %}
-    <h1>This is Vue</h1>
-    <cat-component />
+<synthesis />
 {% endblock %}

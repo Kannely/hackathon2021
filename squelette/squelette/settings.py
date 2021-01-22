@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend.apps.BackendConfig',
-    'frontend.apps.FrontendConfig'
+    'frontend.apps.FrontendConfig',
+    'mockpass.apps.MockpassConfig',
+    'mocksso.apps.MockssoConfig'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'frontend.context_processors.add_menu_to_context',
+                'frontend.context_processors.add_authentification_status_to_context',
             ],
         },
     },
@@ -78,6 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'squelette.wsgi.application'
 
+LOGIN_REDIRECT_URL = 'front_index'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -143,3 +148,23 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# Prefix for mocks
+PASS_PREFIX = '/pass/'
+SSO_PREFIX = '/sso/'
+
+PASS_URL = None
+SSO_URL = None
+
+try:
+    PASS_URL = os.environ["PASS_URL"]
+    print("Using PASS_URL...")
+except KeyError:
+    pass
+    
+try:
+    SSO_URL = os.environ["SSO_URL"]
+    print("Using SSO_URL...")
+except KeyError:
+    pass
+

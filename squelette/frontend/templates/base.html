@@ -3,12 +3,13 @@
     <head>
         <title>
             {% block title %}
-            Hackathon
+            ça PASS ou ça casse
             {% endblock %}
         </title>
         <link rel="stylesheet" href="/static/base.css" />
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+	    <script src="/static/base.js"></script> <!-- The JS is delayed until the end so that all necessary Vue components are loaded -->
 	    {% block script %}{% endblock %}
 	</head>
 	<body>
@@ -17,14 +18,28 @@
 			<img src="/static/logo_white.png" />
 			<ul>
 			    {% for menuitem in menu %}
-			    <li>
-			        <a href="{% url menuitem.url %}">
-			        {% if menuitem.class %}
-			        <span><i class="{{ menuitem.class }}"></i></span>
-			        {% endif %}
-			        {{ menuitem.name }}
-			        </a>
-			    </li>
+			    {% if menuitem.logged and is_authenticated or not menuitem.logged and not is_authenticated %}
+			        <li>
+			            {% with request.resolver_match.url_name as url %}
+			            <a class="{% if url == menuitem.url %}active{% endif %}" href="{% url menuitem.url %}">
+			            	
+			            {% if menuitem.url == 'front_login' or menuitem.url == 'front_logout' %}
+			            	<div class="connexion-link">
+			            		{% if menuitem.class %}
+					            <span><i class="{{ menuitem.class }}"></i></span>
+					            {% endif %}
+			            		{{ menuitem.name }}
+			            	</div>
+			            {% else %}
+			            	{% if menuitem.class %}
+				            <span><i class="{{ menuitem.class }}"></i></span>
+				            {% endif %}
+			            	{{ menuitem.name }}
+			            {% endif %}
+                        {% endwith %}
+			            </a>
+			        </li>
+			    {% endif %}
 			    {% endfor %}
 			</ul>
 			{% endblock %}
@@ -38,6 +53,5 @@
 	        Un beau footer de la team Agathe, Kévin, Audrey !
 		    {% endblock %}
 		</footer>
-	    <script src="/static/base.js"></script> <!-- The JS is delayed until the end so that all necessary Vue components are loaded -->
 	</body>
 </html>

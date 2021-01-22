@@ -1,40 +1,48 @@
 import random
 from django.shortcuts import render
 
-from backend.models import Cat, Kibble
-
-menu = {"menu": [
-    {"name": "Index", "class": "fas fa-cat", "url": "front_index"},
-    {"name": "About", "class": "fas fa-dog", "url": "front_about"},
-    {"name": "Animals", "class": "fas fa-heart", "url": "front_animals"},
-    {"name": "Vue", "class": "fas fa-fish", "url": "front_vue"},
-    {"name": "Movies", "class": "fas fa-paw", "url": "front_movies"}
-]}
-
-
 def index(request):
-    return render(request, "index.html", menu)
+    return render(request, "index.html")
 
+import urllib.request
 
-def about(request):
-    return render(request, "about.html", menu)
+from django.conf import settings
 
+import urllib.request
+from urllib.error import HTTPError
 
-def vue(request):
-    return render(request, "vue.html", menu)
+def __get_sso_url__(request, suffix):
+    if settings.SSO_URL:
+        return settings.SSO_URL + suffix
+    else:
+        return request.build_absolute_uri(settings.SSO_PREFIX + suffix)
 
+def login(request):
+    return render(request, "login.html", { "login_url": __get_sso_url__(request, "login") })
+    
+def __do_logout__(request):
+    cookie = request.headers.get("Cookie")
+    url = __get_sso_url__(request, "logout")
+    new_request = urllib.request.Request(url)
+    if cookie:
+        new_request.add_header("Cookie", cookie)
+    try:
+        response = urllib.request.urlopen(new_request)
+    except:
+        pass
 
-def animals(request):
-    # names = ("Marie", "Berlioz", "Toulouse", "Pistache")
+def logout(request):
+    __do_logout__(request)
+    return render(request, "logout.html")
 
-    # for name in names:
-    # 	cat = Cat(name=name, age=random.randint(1,18), weight=random.randint(2,10))
-    # 	cat.save()
-    context = menu
-    context["cats"] = Cat.objects.all()
-    print(Cat.objects.all())
-    return render(request, "animals.html", context)
+def synthesis(request):
+    return render(request, "synthesis.html")
 
+def obligations(request):
+    return render(request, "obligations.html")
 
-def movies(request):
-    return render(request, "movies.html", menu)
+def skills(request):
+    return render(request, "skills.html")
+
+def courses(request):
+    return render(request, "courses.html")
