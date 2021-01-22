@@ -1,22 +1,18 @@
 Vue.component('courses', {
 	template: `
-	<div class="div-margin">
-		<nav class="nav-two">
-			<div>
-			    <label>Passées<input type="checkbox" v-model="show_only_finished" /></label>
-			    <label>Suivies<input type="checkbox" v-model="show_only_started" /></label>
-				<ul v-for="(slot_courses, slot) in sorted_courses">
-					<li><h3>Créneau {{ slot }}</h3></li>
-					<ul v-for="course in slot_courses">
-						<li>
-							<input type="radio" :id="course.id" :value="course.id" v-model="selected_course" class="navbar-selection">
-							<label :for="course.id" class="navbar-selection">{{ course.code }}</label>
-						</li>
-					</ul>
-				</ul>
-			</div>
+	<div class="secondary-main">
+		<nav class="secondary-nav">
+		    <label class="filter-input">Passées<input type="checkbox" v-model="show_only_finished" /></label>
+		    <label class="filter-input">Suivies<input type="checkbox" v-model="show_only_started" /></label>
+			<ul v-for="(slot_courses, slot) in sorted_courses">
+				<h3>Créneau {{ slot }}</h3>
+				<li v-for="course in slot_courses">
+					<input type="radio" :id="course.id" :value="course.id" v-model="selected_course" class="navbar-selection">
+					<label :for="course.id" class="navbar-selection">{{ course.code }}</label>
+				</li>
+			</ul>
 		</nav>
-		<div style="margin-left: 200px;">
+		<div class="div-margin">
 			<course-details :id="selected_course"/>
 		</div>
 	</div>

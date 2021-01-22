@@ -9,7 +9,7 @@
 
 body {
     display: grid;
-    grid-template-columns: minmax(10em, 10%) 1fr;
+    grid-template-columns: minmax(12em, 10%) 1fr;
     grid-template-rows: 1fr 2em;
     height: 100vh;
     width: 100%;
@@ -18,7 +18,6 @@ body {
 }
 
 nav {
-    position: fixed;
     grid-column: 1;
     grid-row: 1 / -1;
     display: flex;
@@ -26,9 +25,9 @@ nav {
     padding: 1em;
     background-color: var(--darkblue);
     color: red;
-    height: 100%;
-    width: 160px;
-    z-index: 0;
+    height: calc(100% - 2em);
+    width: calc(100% - 2em);
+    overflow-x: hidden;
 }
 
 nav > img {
@@ -44,6 +43,10 @@ nav ul {
     padding: 0;
 }
 
+nav li {
+    width: 100%;
+}
+
 nav a {
     color: white;
     text-decoration: none;
@@ -57,24 +60,26 @@ nav span {
 nav .connexion-link {
     position: absolute;
     bottom: 0;
-    padding-bottom: 3em;
+    padding-bottom: 1em;
 }
 
 nav hr {
     color: white;
-    width: calc(160px + 2em);
-    margin: 1em -2em;
+    margin: 1em -3em;
 }
 
 main {
     grid-column: 2;
     grid-row: 1;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
     margin: 0;
     padding: 0;
 }
 
 footer {
-    z-index: -2;
     grid-column: 2;
     grid-row: 2;
     display: flex;
@@ -89,7 +94,8 @@ footer {
 }
 
 .div-margin {
-    margin: 2em 4em;
+    padding: 2em 4em;
+    overflow: auto;
 }
 
 /*input {
@@ -112,9 +118,9 @@ input:focus {
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.75);
 }*/
 
-#filter-input {
-    width: 40%;
-    margin: 1% 0;
+.filter-input {
+    width: 80%;
+    margin: 0.2em 1em;
 }
 
 button {
@@ -136,30 +142,6 @@ button:hover {
 .center>table {
     margin-left: auto;
     margin-right: auto;
-}
-
-#animals-table {
-    border-collapse: collapse;
-    text-align: center;
-}
-
-#animals-table th {
-  background-color: #8f9cf0;
-  color: white;
-  font-size: 1.2em;
-}
-
-#animals-table tr {
-    line-height: 1.5;
-}
-
-#animals-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#animals-table td, #animals-table th {
-    border: 1px solid #ddd;
-    padding: 0 4vh;
 }
 
 .info-table {
@@ -185,9 +167,20 @@ button:hover {
 
 /* ***** SYNTHESIS ***** */
 
-#synthesis-table {
+#synthesis-main {
+    display: flex;
+    height: 100%;
     width: 100%;
-    border-collapse: collapse;
+    flex-direction: column;
+    overflow-x: auto;
+}
+
+#synthesis-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--lightblue);
     text-align: center;
     line-height: 0.5;
     margin: 0;
@@ -195,16 +188,11 @@ button:hover {
     padding: 0;
 }
 
-#synthesis-table img {
-    height: 100px;
-}
-
-tr.synthesis-info {
-    background-color: var(--lightblue);
+#synthesis-info img {
+    max-height: 100px;
 }
 
 #synthesis-graph-table {
-    width: 100%;
     border-collapse: collapse;
     text-align: center;    
 }
@@ -223,26 +211,20 @@ tr.synthesis-info {
 
 /* ***** SKILLS ***** */
 
-.nav-two {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    display: flex;
-    flex-direction: column;
+.secondary-main {
+    display: grid;
+    grid-template-columns: minmax(12em, 10%) 1fr;
+    grid-template-rows: 1fr;
     height: 100%;
-    width: 160px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: var(--lightblue);
-    padding-top: 0;
-    margin-left: 180px;
-    margin-bottom: 0;
-    color: black;
-    align-items: left;
-    overflow-y: auto;
+    width: 100%;
 }
 
-.nav-two ul {
+.secondary-nav {
+    background-color: var(--lightblue);
+    color: black;
+}
+
+.secondary-nav ul {
     margin: 0.5em;
 }
 

@@ -1,40 +1,34 @@
 Vue.component('synthesis', {
 	template:`
-		<div>
-			<table id="synthesis-table">
-				<tr class="synthesis-info">
+		<div id="synthesis-main">
+			<div id="synthesis-info">
+				<img src="/static/user.png"/>
+				<div>
+					<h1>{{ firstName }} {{ lastName }}</h1>
+					<h3>Campus : {{ campus }}</h3>
+					<h3>{{ formation }}</h3>
+				</div>
+				<table>
 					<td>
-						<img src="/static/user.png"/>
+						<h4>PCF</h4>
+						<p>{{ courses_a1.result }}/{{ courses_a1.total }} UEs validées</p>
+						<h4>TAF {{ tafA2 }}</h4>
+						<p v-if="tafA2 != '-'">{{ courses_a2.result }}/{{ courses_a2.total }} UEs validées</p>
+						<p v-else>-</p>
+						<h4>TAF {{ tafA3 }}</h4>
+						<p v-if="tafA3 != '-'">{{ courses_a3.result }}/{{ courses_a3.total }} UEs validées</p>
+						<p v-else>-</p>
 					</td>
 					<td>
-						<h1>{{ firstName }} {{ lastName }}</h1>
-						<h3>Campus : {{ campus }}</h3>
-						<h3>{{ formation }}</h3>
+						<h4>Année en cours</h4>
+						<p>{{ tokens.current_year }} jetons</p>
+						<p>{{ ects.current_year }}  ECTS</p>
+						<h4>Total</h4>
+						<p>{{ tokens.total }} jetons</p>
+						<p>{{ ects.total }}  ECTS</p>
 					</td>
-					<td>
-						<table style="width:100%">
-							<td>
-								<h4>PCF</h4>
-								<p>{{ courses_a1.result }}/{{ courses_a1.total }} UEs validées</p>
-								<h4>TAF {{ tafA2 }}</h4>
-								<p v-if="tafA2 != '-'">{{ courses_a2.result }}/{{ courses_a2.total }} UEs validées</p>
-								<p v-else>-</p>
-								<h4>TAF {{ tafA3 }}</h4>
-								<p v-if="tafA3 != '-'">{{ courses_a3.result }}/{{ courses_a3.total }} UEs validées</p>
-								<p v-else>-</p>
-							</td>
-							<td>
-								<h4>Année en cours</h4>
-								<p>{{ tokens.current_year }} jetons</p>
-								<p>{{ ects.current_year }}  ECTS</p>
-								<h4>Total</h4>
-								<p>{{ tokens.total }} jetons</p>
-								<p>{{ ects.total }}  ECTS</p>
-							</td>
-						</table>
-					</td>
-				</tr>
-			</table>
+				</table>
+			</div>
 			<table id="synthesis-graph-table">
 				<tr>
 					<td>

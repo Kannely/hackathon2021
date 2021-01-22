@@ -1,20 +1,16 @@
 Vue.component('skills', {
 	template: `
-	<div class="div-margin">
-		<nav class="nav-two">
-			<div>
-				<ul v-for="(type_skills, type) in sorted_skills">
-					<li><h3>{{ type }}</h3></li>
-					<ul v-for="skill in type_skills">
-						<li>
-							<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection">
-							<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
-						</li>
-					</ul>
-				</ul>
-			</div>
+	<div class="secondary-main">
+		<nav class="secondary-nav">
+			<ul v-for="(type_skills, type) in sorted_skills">
+				<h3>{{ type }}</h3>
+				<li v-for="skill in type_skills">
+					<input type="radio" :id="skill.id" :value="skill.id" v-model="selected_skill" class="navbar-selection">
+					<label :for="skill.id" class="navbar-selection">{{ skill.code }}</label>
+				</li>
+			</ul>
 		</nav>
-		<div style="margin-left: 200px;">
+		<div class="div-margin">
 			<skill-details :id="selected_skill"/>
 		</div>
 	</div>
