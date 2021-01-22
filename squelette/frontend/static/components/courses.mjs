@@ -3,6 +3,8 @@ Vue.component('courses', {
 	<div class="div-margin">
 		<nav class="nav-two">
 			<div>
+			    <label>Passées<input type="checkbox" v-model="show_only_finished" /></label>
+			    <label>Suivies<input type="checkbox" v-model="show_only_started" /></label>
 				<ul v-for="(slot_courses, slot) in sorted_courses">
 					<li><h3>Créneau {{ slot }}</h3></li>
 					<ul v-for="course in slot_courses">
@@ -22,13 +24,17 @@ Vue.component('courses', {
 	data: function() {
 		return {
 			courses: [],
-			selected_course: 3,
+			selected_course: undefined,
+			show_only_finished: false,
+			show_only_started: true
 		}
 	},
 	computed: {
 	    sorted_courses() {
 	        let sorted_courses = {};
 	        for (const course of this.courses) {
+	            if (this.show_only_finished && !course.done) continue;
+	            if (this.show_only_started && !(course.in_progress || course.done)) continue;
 	            if (!sorted_courses[course.slot]) sorted_courses[course.slot] = [];
 	            let copied_course = {...course}; // Deep copy
 	            delete copied_course.slot;

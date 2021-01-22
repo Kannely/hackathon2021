@@ -137,9 +137,8 @@ Vue.component('synthesis-skills-chart', {
 			    maintainAspectRatio: false,
 				scale: {
                     ticks: {
-                        beginAtZero: true,
                         max: 5,
-                        min: 0,
+                        min: -1,
                         stepSize: 1
 				    }
 			    }
