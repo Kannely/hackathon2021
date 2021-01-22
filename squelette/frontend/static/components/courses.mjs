@@ -2,8 +2,9 @@ Vue.component('courses', {
 	template: `
 	<div class="secondary-main">
 		<nav class="secondary-nav">
-		    <label class="filter-input">Passées<input type="checkbox" v-model="show_only_finished" /></label>
-		    <label class="filter-input">Suivies<input type="checkbox" v-model="show_only_started" /></label>
+		    <label class="filter-input">En cours<input type="checkbox" v-model="show_only_in_progress" /></label>
+		    <label class="filter-input">Terminées<input type="checkbox" v-model="show_only_done" /></label>
+		    <label class="filter-input">Filtre :<input type="text" v-model="filter_courses" /></label>
 			<ul v-for="(slot_courses, slot) in sorted_courses">
 				<h3>Créneau {{ slot }}</h3>
 				<li v-for="course in slot_courses">
@@ -13,7 +14,7 @@ Vue.component('courses', {
 			</ul>
 		</nav>
 		<div class="div-margin">
-			<course-details :id="selected_course"/>
+			<course-details v-if="selected_course" :id="selected_course"/>
 		</div>
 	</div>
 	`,
@@ -21,16 +22,19 @@ Vue.component('courses', {
 		return {
 			courses: [],
 			selected_course: undefined,
-			show_only_finished: false,
-			show_only_started: true
+			show_only_done: false,
+			show_only_in_progress: true,
+			filter_courses: ""
 		}
 	},
 	computed: {
 	    sorted_courses() {
 	        let sorted_courses = {};
 	        for (const course of this.courses) {
-	            if (this.show_only_finished && !course.done) continue;
-	            if (this.show_only_started && !(course.in_progress || course.done)) continue;
+	            if (this.show_only_done && !this.show_only_in_progress && !course.done) continue;
+	            if (this.show_only_in_progress && !this.show_only_done && !course.in_progress) continue;
+	            if (this.show_only_done && this.show_only_in_progress && !(course.done || course.in_progress)) continue;
+	            if (this.filter_courses && !course.code.toLowerCase().includes(this.filter_courses.toLowerCase())) continue;
 	            if (!sorted_courses[course.slot]) sorted_courses[course.slot] = [];
 	            let copied_course = {...course}; // Deep copy
 	            delete copied_course.slot;
