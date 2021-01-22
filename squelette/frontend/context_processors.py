@@ -3,8 +3,8 @@ def add_menu_to_context(request):
     {"name": "Connexion", "url": "front_login", "class": "fas fa-user-circle", "logged": False},
     {"name": "Ma fiche", "url": "front_synthesis", "class": "fas fa-sticky-note", "logged": True},    
     {"name": "Conditions de diplomation", "url": "front_obligations", "class": "fas fa-flag-checkered", "logged": True},
-    {"name": "Compétences", "url": "front_skills", "class": "fas fa-book-open", "logged": True},
-    {"name": "UEs", "url": "front_courses", "class": "fas fa-school", "logged": True},
+    {"name": "Compétences", "url": "front_skills", "class": "fas fa-check-double", "logged": True},
+    {"name": "UEs", "url": "front_courses", "class": "fas fa-book-open", "logged": True},
     {"name": "Déconnexion", "url": "front_logout", "class": "fas fa-user-circle", "logged": True},
 ]}
 
