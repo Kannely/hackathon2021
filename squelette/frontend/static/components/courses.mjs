@@ -106,7 +106,7 @@ Vue.component('course-details', {
 	methods: {
 		async searchDetails() {
 			let id = this.id;
-			if (this.id === undefined) console.log(id = 3);
+			if (this.id === undefined) id = 3;
 			const response = await fetch(`/back/ue/${id}`);
 			this.info = await response.json();
 			this.code = this.info.code;
@@ -169,6 +169,7 @@ Vue.component('course-table', {
 	methods: {
 		async searchDetails() {
 			this.details.splice(0);
+			this.tokens_total = 0;
 			for (var i = 0; i < this.skills.length; i++) {
 				let id = this.skills[i];
 				const response = await fetch(`/back/comp_eval/${id}`);
