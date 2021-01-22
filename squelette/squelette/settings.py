@@ -153,3 +153,15 @@ STATICFILES_DIRS = (
 PASS_PREFIX = '/pass/'
 SSO_PREFIX = '/sso/'
 
+try:
+    PASS_URL = os.environ["PASS_URL"]
+    print("Using PASS_URL...")
+except KeyError:
+    pass
+    
+try:
+    SSO_URL = os.environ["SSO_URL"]
+    print("Using SSO_URL...")
+except KeyError:
+    pass
+
