@@ -22,10 +22,11 @@ lv_dict = {
 def index(request):
     return HttpResponse("Hello, world. This is the back-end !")
 
-
 def __get_pass_url__(request, suffix):
-    return request.build_absolute_uri(settings.PASS_PREFIX + suffix)
-
+    if settings.PASS_URL:
+        return settings.PASS_URL + suffix
+    else:
+        return request.build_absolute_uri(settings.PASS_PREFIX + suffix)
 
 def __make_json_request__(request, url, transfer_cookie=True, fields_only=False):
     cookie = request.headers.get("Cookie")

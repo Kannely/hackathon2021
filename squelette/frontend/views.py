@@ -12,7 +12,10 @@ import urllib.request
 from urllib.error import HTTPError
 
 def __get_sso_url__(request, suffix):
-    return request.build_absolute_uri(settings.SSO_PREFIX + suffix)
+    if settings.SSO_URL:
+        return settings.SSO_URL + suffix
+    else:
+        return request.build_absolute_uri(settings.SSO_PREFIX + suffix)
 
 def login(request):
     return render(request, "login.html", { "login_url": __get_sso_url__(request, "login") })
