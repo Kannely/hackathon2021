@@ -70,7 +70,7 @@ Vue.component('courses', {
 Vue.component('course-details', {
 	props: ["id"],
 	template: `
-	<div v-show="id">
+	<div>
 		<h1>{{ code }} - {{ name }}</h1>
 		<h3>Description :</h3>
 		<p>{{ description }}</p>
@@ -87,7 +87,7 @@ Vue.component('course-details', {
 				</tr>
 			</tbody>
 		</table>
-		<course-table :skills="skills" />
+		<course-table :skills="skills" @clicked="updateTokens" />
 	</div>
 	`,
 	data: function() {
@@ -105,8 +105,9 @@ Vue.component('course-details', {
 	},
 	methods: {
 		async searchDetails() {
-		    if (!this.id) return;
-			const response = await fetch(`/back/ue/${this.id}`);
+			let id = this.id;
+			if (this.id === undefined) console.log(id = 3);
+			const response = await fetch(`/back/ue/${id}`);
 			this.info = await response.json();
 			this.code = this.info.code;
 			this.name = this.info.nom;
@@ -115,13 +116,16 @@ Vue.component('course-details', {
 			this.period = this.info.periode;
 			this.grade = this.info.grade;
 			if (this.info.suivi == true) {
-				this.ects[0] = this.info.ects_obtenus;
-				this.ects[1] = this.info.ects_tentes;
+				this.ects[0] = Math.max(0, this.info.ects_obtenus);
+				this.ects[1] = Math.max(0, this.info.ects_tentes);
 				this.skills = [];
 				for (var i = 0; i < this.info.competences.length; i++) {
 					this.skills.push(this.info.competences[i]);
 				}
 			}			
+		},
+		updateTokens(result) {
+			this.tokens = result;
 		}
 	},
 	mounted: function() {
@@ -158,7 +162,8 @@ Vue.component('course-table', {
 	`,
 	data: function() {
 		return {
-			details: []
+			details: [],
+			tokens_total: 0
 		}
 	},
 	methods: {
@@ -174,8 +179,10 @@ Vue.component('course-table', {
 					eval: this.info.note,
 					tokens: [this.info.jetons_valides, this.info.jetons_tentes]
 				}
+				this.tokens_total += course.tokens[0];
 				Vue.set(this.details, i, course);
 			}
+			this.$emit('clicked', this.tokens_total);
 		}
 	},
 	mounted: function() {
