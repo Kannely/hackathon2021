@@ -153,6 +153,9 @@ STATICFILES_DIRS = (
 PASS_PREFIX = '/pass/'
 SSO_PREFIX = '/sso/'
 
+PASS_URL = None
+SSO_URL = None
+
 try:
     PASS_URL = os.environ["PASS_URL"]
     print("Using PASS_URL...")
