@@ -4,7 +4,7 @@ Vue.component('courses', {
 		<nav class="secondary-nav">
 		    <label class="filter-input">En cours<input type="checkbox" v-model="show_only_in_progress" /></label>
 		    <label class="filter-input">Terminées<input type="checkbox" v-model="show_only_done" /></label>
-		    <label class="filter-input">Filtre :<input type="text" v-model="filter_courses" /></label>
+		    <label class="filter-input">Filtre : <input type="text" v-model="filter_courses" /></label>
 			<ul v-for="(slot_courses, slot) in sorted_courses">
 				<h3>Créneau {{ slot }}</h3>
 				<li v-for="course in slot_courses">

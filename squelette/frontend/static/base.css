@@ -163,7 +163,7 @@ button:hover {
 
 .info-table td {
     border: 1px solid var(--bordergray);
-    padding: 0 1.5em;
+    padding: 0;
 }
 
 /* ***** SYNTHESIS ***** */
@@ -243,6 +243,10 @@ label.navbar-selection {
 
 input[type="radio"]:checked+label{
     font-weight: bold;
+}
+
+.filter-input input {
+    max-width: 50%;
 } 
 
 #skill-description {
@@ -263,6 +267,10 @@ input[type="radio"]:checked+label{
 
 #skill-details-table {
     margin: 2em;
+}
+
+#skill-details-table td, #skill-details-table th {
+    padding: 0.5em;
 }
 
 #skills-chart {
