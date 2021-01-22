@@ -112,13 +112,13 @@ Vue.component('skill-details', {
 			this.code = this.info.code;
 			this.name = this.info.nom;
 			if (this.info.description === null || this.info.description == "")
-				this.description = "-";
+				this.description = ["Pas de description"];
 			else
 				this.description = this.info.description.split("* ").slice(1);
 
 			for (let i = 0; i < this.info.ue_details.length; i++) {
 			    let course = this.info.ue_details[i];
-			    this.seuils[course.niveau-1]++;
+			    this.seuils[course.niveau-1] += course.jetons_valides;
 				Vue.set(this.courses_details, i, course);
 			}
 
