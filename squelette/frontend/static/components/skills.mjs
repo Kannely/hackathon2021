@@ -112,7 +112,7 @@ Vue.component('skill-details', {
 			this.code = this.info.code;
 			this.name = this.info.nom;
 			if (this.info.description === null || this.info.description == "")
-				this.description = "-";
+				this.description = ["Pas de description"];
 			else
 				this.description = this.info.description.split("* ").slice(1);
 
