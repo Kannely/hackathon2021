@@ -105,11 +105,16 @@ Vue.component('skill-details', {
 	},
 	methods: {
 		async searchDetails() {
+			this.seuils = Array(5).fill(0);
+			this.courses_details = [];
 			const response = await fetch(`/back/comp/${this.id}`);
 			this.info = await response.json();
 			this.code = this.info.code;
 			this.name = this.info.nom;
-			this.description = this.info.description.split("* ").slice(1);
+			if (this.info.description === null || this.info.description == "")
+				this.description = "-";
+			else
+				this.description = this.info.description.split("* ").slice(1);
 
 			for (let i = 0; i < this.info.ue_details.length; i++) {
 			    let course = this.info.ue_details[i];
