@@ -22,11 +22,11 @@ nav {
     grid-row: 1 / -1;
     display: flex;
     flex-direction: column;
-    padding: 1em;
+    padding: 0.5em;
     background-color: var(--darkblue);
     color: red;
-    height: calc(100% - 2em);
-    width: calc(100% - 2em);
+    height: calc(100% - 1em);
+    width: calc(100% - 1em);
     overflow-x: hidden;
 }
 
@@ -39,7 +39,7 @@ nav ul {
     display: flex;
     flex-direction: column;
     list-style: none;
-    margin: 1em;
+    margin: 0;
     padding: 0;
 }
 
@@ -51,15 +51,21 @@ nav a {
     color: white;
     text-decoration: none;
     line-height: 2;
+    margin: 2em;
+}
+
+nav a.active {
+    font-weight: bold;
 }
 
 nav span {
-    padding-right: 0.5em;
+    padding-right: 0.2em;
 }
 
 nav .connexion-link {
     position: absolute;
     bottom: 0;
+    padding-left: 1.5em;
     padding-bottom: 1em;
 }
 
@@ -148,7 +154,7 @@ button:hover {
     width: 100%;
     border: 1px solid #AEADAC;
     border-collapse: collapse;
-    line-height: 2em;
+    line-height: 1em;
     text-align: center;
 }
 
@@ -207,6 +213,10 @@ button:hover {
 
 #obligations-table {
     text-align: left;
+}
+
+#obligations-table td {
+    padding: 0.5em;
 }
 
 /* ***** SKILLS ***** */

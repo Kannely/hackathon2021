@@ -20,9 +20,10 @@
 			    {% for menuitem in menu %}
 			    {% if menuitem.logged and is_authenticated or not menuitem.logged and not is_authenticated %}
 			        <li>
-			            <a href="{% url menuitem.url %}">
+			            {% with request.resolver_match.url_name as url %}
+			            <a class="{% if url == menuitem.url %}active{% endif %}" href="{% url menuitem.url %}">
 			            	
-			            {% if menuitem.name == 'Connexion' or menuitem.name == 'Déconnexion' %}
+			            {% if menuitem.url == 'front_login' or menuitem.url == 'front_logout' %}
 			            	<div class="connexion-link">
 			            		<hr>
 			            		{% if menuitem.class %}
@@ -36,7 +37,7 @@
 				            {% endif %}
 			            	{{ menuitem.name }}
 			            {% endif %}
-
+                        {% endwith %}
 			            </a>
 			        </li>
 			    {% endif %}
