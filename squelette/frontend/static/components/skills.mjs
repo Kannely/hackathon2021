@@ -113,7 +113,10 @@ Vue.component('skill-details', {
 			this.info = await response.json();
 			this.code = this.info.code;
 			this.name = this.info.nom;
-			this.description = this.info.description.split("* ").slice(1);
+			if (this.info.description === null || this.info.description == "")
+				this.description = "-";
+			else
+				this.description = this.info.description.split("* ").slice(1);
 
 			for (let i = 0; i < this.info.ue_details.length; i++) {
 			    let course = this.info.ue_details[i];
