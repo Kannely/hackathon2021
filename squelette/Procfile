@@ -1,1 +1,1 @@
-web: gunicorn squelette.wsgi --log-file -
+web: gunicorn squelette.asgi:application -k uvicorn.workers.UvicornWorker --log-file -
