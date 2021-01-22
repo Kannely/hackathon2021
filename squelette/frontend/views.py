@@ -4,21 +4,6 @@ from django.shortcuts import render
 def index(request):
     return render(request, "index.html")
 
-
-def bus(request):
-    return render(request, "bus.html")
-
-
-def vue(request):
-    return render(request, "vue.html")
-
-
-def movies(request):
-    return render(request, "movies.html")
-    
-def login(request):
-    return render(request, "login.html")
-
 import urllib.request
 
 from django.conf import settings
@@ -28,6 +13,9 @@ from urllib.error import HTTPError
 
 def __get_sso_url__(request, suffix):
     return request.build_absolute_uri(settings.SSO_PREFIX + suffix)
+
+def login(request):
+    return render(request, "login.html", { "login_url": __get_sso_url__(request, "login") })
     
 def __do_logout__(request):
     cookie = request.headers.get("Cookie")
@@ -43,14 +31,6 @@ def __do_logout__(request):
 def logout(request):
     __do_logout__(request)
     return render(request, "logout.html")
-
-
-def chart(request):
-    labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"]
-    data = [12, 19, 3, 5, 2, 3]
-    context = {"labels": labels, "data": data}
-
-    return render(request, 'chart.html', context)
 
 def synthesis(request):
     return render(request, "synthesis.html")

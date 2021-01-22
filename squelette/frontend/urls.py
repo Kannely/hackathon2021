@@ -4,11 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='front_index'),
-    path('bus', views.bus, name='front_bus'),
-    path('movies', views.movies, name='front_movies'),
-    path('vue', views.vue, name='front_vue'),
-    path('chart', views.chart, name='front_chart'),
-
     path('login', views.login, name="front_login"),
     path('logout', views.logout, name="front_logout"),
     path('synthesis', views.synthesis, name='front_synthesis'),

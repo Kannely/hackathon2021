@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
         event.preventDefault();
         event.stopPropagation();
         const form_data = new FormData(login_form);
-        fetch(`${SSO_PREFIX}login`, {
+        fetch(login_form.action, {
             method: "POST",
             body: form_data
         }).then((response) => {

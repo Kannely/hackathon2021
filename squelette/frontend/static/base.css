@@ -45,13 +45,13 @@ nav ul {
 
 nav li {
     width: 100%;
+    margin: 0.5em;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    line-height: 2;
-    margin: 2em;
+    line-height: 1;
 }
 
 nav a.active {
@@ -65,13 +65,8 @@ nav span {
 nav .connexion-link {
     position: absolute;
     bottom: 0;
-    padding-left: 1.5em;
+    padding-left: 0.5em;
     padding-bottom: 1em;
-}
-
-nav hr {
-    color: white;
-    margin: 1em -3em;
 }
 
 main {
@@ -215,8 +210,8 @@ button:hover {
     text-align: left;
 }
 
-#obligations-table td {
-    padding: 0.5em;
+#obligations-table td, #obligations-table th {
+    padding: 0.8em;
 }
 
 /* ***** SKILLS ***** */
