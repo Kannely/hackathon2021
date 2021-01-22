@@ -82,12 +82,12 @@ Vue.component('course-details', {
 					<td>Grade : {{ grade }}</td>
 					<td>
 						<tr>Jetons : {{ tokens }}</tr>
-						<tr>ECTS : {{ ects }}</tr>
+						<tr>ECTS : {{ ects[0] }}/{{ ects[1] }}</tr>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<course-table />
+		<course-table :skills="skills" />
 	</div>
 	`,
 	data: function() {
@@ -98,8 +98,9 @@ Vue.component('course-details', {
 			teacher: "",
 			period: "",
 			grade: "",
-			tokens: "",
-			ects: ""
+			tokens: 0,
+			ects: [0,0],
+			skills: []
 		}
 	},
 	methods: {
@@ -112,6 +113,14 @@ Vue.component('course-details', {
 			this.teacher = this.info.responsable;
 			this.period = this.info.periode;
 			this.grade = this.info.grade;
+			if (this.info.suivi == true) {
+				this.ects[0] = this.info.ects_obtenus;
+				this.ects[1] = this.info.ects_tentes;
+				this.skills = [];
+				for (var i = 0; i < this.info.competences.length; i++) {
+					this.skills.push(this.info.competences[i]);
+				}
+			}			
 		}
 	},
 	mounted: function() {
@@ -125,7 +134,7 @@ Vue.component('course-details', {
 })
 
 Vue.component('course-table', {
-	props: ["code"],
+	props: ["skills"],
 	template: `
 	<div>
 		<table id="course-skills-table" class="info-table">
@@ -135,49 +144,45 @@ Vue.component('course-table', {
 				<th>Jetons</th>
 				<th>Evaluation</th>
 			</thead>
-			<tbody v-for="row in details.skills">
+			<tbody v-for="row in details">
 				<tr>
 					<td>{{ row.name }}</td>
 					<td>{{ row.level }}</td>
-					<td>{{ row.tokens }}</td>
+					<td>{{ row.tokens[0] }}/{{ row.tokens[1] }}</td>
 					<td>{{ row.eval }}</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	`,
-	methods: {
-		searchDetails() {
-			//const response = await fetch(`/back/actor/${this.actorName}/${this.actorSurname}`);
-			this.details = {
-				period: 'A2S2',
-				grade: 'C',
-				tokens: '3/3',
-				ects: '4/5',
-				skills: [
-					{
-						name : 'CSG1',
-						level : '3',
-						tokens: '3',
-						eval: '='
-					},
-					{
-						name : 'CSG3',
-						level : '3',
-						tokens: '3',
-						eval: '+'
-					},
-					{
-						name : 'CST1',
-						level : '2',
-						tokens: '3',
-						eval: '='
-					}
-				]
-			}		
-		}	
+	data: function() {
+		return {
+			details: []
+		}
 	},
-	created: function() {
+	methods: {
+		async searchDetails() {
+			this.details.splice(0);
+			for (var i = 0; i < this.skills.length; i++) {
+				let id = this.skills[i];
+				const response = await fetch(`/back/comp_eval/${id}`);
+				this.info = await response.json();
+				let course = {
+					name: this.info.competence,
+					level: this.info.niveau,
+					eval: this.info.note,
+					tokens: [this.info.jetons_valides, this.info.jetons_tentes]
+				}
+				Vue.set(this.details, i, course);
+			}
+		}
+	},
+	mounted: function() {
 		this.searchDetails();
+	},
+	watch: {
+		skills() {
+			this.searchDetails();
+		}
 	}
 })
