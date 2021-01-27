@@ -59,7 +59,7 @@ Vue.component('synthesis', {
 	},
 	methods: {
 		async searchSynthesis() {
-			const response = await fetch(`/back/synthesis`);
+			const response = await fetch(`/back/synthesis`, {credentials: "include"});
 			this.info = await response.json();
 			this.lastName = this.info["nom"];
 			this.firstName = this.info["prenom"];
@@ -69,19 +69,19 @@ Vue.component('synthesis', {
 			this.formation = this.info["formation"];
 		},
 		async searchTokens() {
-			const response = await fetch(`/back/jetons`);
+			const response = await fetch(`/back/jetons`, {credentials: "include"});
 			this.info = await response.json();
 			this.tokens.current_year = this.info["current_year"];
 			this.tokens.total = this.info["total"];
 		},
 		async searchECTS() {
-			const response = await fetch(`/back/ects`);
+			const response = await fetch(`/back/ects`, {credentials: "include"});
 			this.info = await response.json();
 			this.ects.current_year = this.info["current_year"];
 			this.ects.total = this.info["total"];
 		},
 		async searchUE() {
-			const response = await fetch(`/back/ue_per_year`);
+			const response = await fetch(`/back/ue_per_year`, {credentials: "include"});
 			this.info = await response.json();
 			this.courses_a1.result = this.info["A1"]["valide"];
 			this.courses_a1.total = this.info["A1"]["tente"];
@@ -108,7 +108,7 @@ Vue.component('synthesis-skills-chart', {
 	},
 	methods: {
 		async searchSkills() {
-			const response = await fetch(`/back/comp_gen`);
+			const response = await fetch(`/back/comp_gen`, {credentials: "include"});
 			this.info = await response.json();
 			for (var i = 1; i < 15; i++) {
 				if (this.info["CG"+i] >= 0)
@@ -158,7 +158,7 @@ Vue.component('synthesis-obligations-chart', {
 	},
 	methods: {
 		async searchObligations() {
-			const response = await fetch(`/back/obligations`);
+			const response = await fetch(`/back/obligations`, {credentials: "include"});
 			this.info = await response.json();
 			this.percentage = Math.round(100*this.info["percentage"]);
 		},

@@ -51,7 +51,7 @@ Vue.component('obligations-table', {
 	},
 	methods: {
 		async searchObligations() {
-			const response = await fetch(`/back/obligations`);
+			const response = await fetch(`/back/obligations`, {credentials: "include"});
 			this.info = await response.json();
 			for (let i = 0; i < this.obligations.length; i++) {
 			    let obligation = this.obligations[i];

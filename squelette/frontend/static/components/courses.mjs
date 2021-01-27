@@ -45,7 +45,7 @@ Vue.component('courses', {
 	},
 	methods: {
 		async searchCourses() {
-			const response = await fetch(`/back/ue_list`);
+			const response = await fetch(`/back/ue_list`, {credentials: "include"});
 			this.info = await response.json();
 			for (let i = 0; i < this.info.length; i++) {
 				const info_course = this.info[i];
@@ -107,7 +107,7 @@ Vue.component('course-details', {
 		async searchDetails() {
 			let id = this.id;
 			if (this.id === undefined) id = 3;
-			const response = await fetch(`/back/ue/${id}`);
+			const response = await fetch(`/back/ue/${id}`, {credentials: "include"});
 			this.info = await response.json();
 			this.code = this.info.code;
 			this.name = this.info.nom;
@@ -172,7 +172,7 @@ Vue.component('course-table', {
 			this.tokens_total = 0;
 			for (var i = 0; i < this.skills.length; i++) {
 				let id = this.skills[i];
-				const response = await fetch(`/back/comp_eval/${id}`);
+				const response = await fetch(`/back/comp_eval/${id}`, {credentials: "include"});
 				this.info = await response.json();
 				let course = {
 					name: this.info.competence,

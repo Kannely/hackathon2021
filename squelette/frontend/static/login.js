@@ -8,10 +8,14 @@ window.addEventListener('load', () => {
         const form_data = new FormData(login_form);
         fetch(login_form.action, {
             method: "POST",
+            credentials: "include",
             body: form_data
         }).then((response) => {
-            if (response.status == 200) window.location.replace("/front/synthesis");
-            else window.location.reload();
+            if (response.status == 200) {
+                const auth = response.headers.get("Authentification");
+                document.cookie = "sessionid=" + auth + ";path=/;samesite=lax";
+                window.location.replace("/front/synthesis");
+            } else window.location.reload();
         }).catch((e) => window.location.reload());
     });
 });
